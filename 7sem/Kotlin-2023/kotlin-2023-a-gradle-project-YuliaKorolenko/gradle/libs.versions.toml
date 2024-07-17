@@ -1,0 +1,24 @@
+[versions]
+kotlin-version = "1.9.10"
+kotest-version = "5.7.2"
+ktlint-version = "0.50.0"
+detekt-version = "1.23.1"
+mockk-version = "1.13.8"
+ktlintG-version = "11.5.0"
+
+[libraries]
+mockk = { module = "io.mockk:mockk", version.ref = "mockk-version" }
+ktlint = { module = "com.pinterest:ktlint", version.ref = "ktlint-version" }
+kotest-runner = { module = "io.kotest:kotest-runner-junit5", version.ref = "kotest-version"}
+
+[plugins]
+kotlin = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin-version" }
+ktlintG = { id = "org.jlleitschuh.gradle.ktlint", version.ref = "ktlintG-version" }
+detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt-version" }
+
+[bundles]
+
+testing = [
+    'kotest-runner',
+    'mockk'
+]
