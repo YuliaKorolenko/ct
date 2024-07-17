@@ -1,0 +1,255 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="ALL" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="1cc94642-e74c-41a4-8812-9739c9ce5e33" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/lesson9/homework/internal/app/perm.go" beforeDir="false" afterPath="$PROJECT_DIR$/lesson9/homework/internal/app/perm.go" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Go File" />
+      </list>
+    </option>
+  </component>
+  <component name="GOROOT" url="file://$USER_HOME$/sdk/go1.20.3" />
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProjectId" id="2OKwusWmmVGK4BvymA3LShcDv7g" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;DefaultGoTemplateProperty&quot;: &quot;Go File&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.go.formatter.settings.were.checked&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.go.migrated.go.modules.settings&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.go.modules.go.list.on.any.changes.was.set&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;configurable..is.expanded&quot;: &quot;true&quot;,
+    &quot;go.import.settings.migrated&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/Users/yulkorolenko/Desktop/GoCourse/go-course-for-students/lesson10/homework&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;go.sdk&quot;
+  }
+}</component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/lesson10/homework" />
+      <recent name="$PROJECT_DIR$/lesson9/homework" />
+      <recent name="$PROJECT_DIR$/lesson9/homework/internal" />
+      <recent name="$PROJECT_DIR$/lesson9/homework/internal/ports" />
+      <recent name="$PROJECT_DIR$/lesson9/homework/internal/ports/grpc" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/lesson10/homework/internal/adapters" />
+      <recent name="$PROJECT_DIR$/lesson10/homework/internal/tests/httpgin" />
+      <recent name="$PROJECT_DIR$/lesson10/homework/internal/tests" />
+      <recent name="$PROJECT_DIR$/lesson10/homework/internal/tests/grpc" />
+      <recent name="$PROJECT_DIR$/lesson10/homework/internal/ports/grpc/proto" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Go Test.go test tests">
+    <configuration default="true" type="GoApplicationRunConfiguration" factoryName="Go Application">
+      <module name="go-course-for-students" />
+      <working_directory value="$PROJECT_DIR$" />
+      <go_parameters value="-i" />
+      <kind value="FILE" />
+      <directory value="$PROJECT_DIR$" />
+      <filePath value="$PROJECT_DIR$" />
+      <method v="2" />
+    </configuration>
+    <configuration name="TestSuiteRunner in homework10/internal/tests/httpgin" type="GoTestRunConfiguration" factoryName="Go Test" temporary="true" nameIsGenerated="true">
+      <module name="go-course-for-students" />
+      <working_directory value="$PROJECT_DIR$/lesson10/homework/internal/tests/httpgin" />
+      <root_directory value="$PROJECT_DIR$/lesson10/homework" />
+      <kind value="PACKAGE" />
+      <package value="homework10/internal/tests/httpgin" />
+      <directory value="$PROJECT_DIR$" />
+      <filePath value="$PROJECT_DIR$" />
+      <framework value="gotest" />
+      <pattern value="^\QTestSuiteRunner\E$" />
+      <method v="2" />
+    </configuration>
+    <configuration name="TestValidate in homework10/internal/tests/grpc" type="GoTestRunConfiguration" factoryName="Go Test" temporary="true" nameIsGenerated="true">
+      <module name="go-course-for-students" />
+      <working_directory value="$PROJECT_DIR$/lesson10/homework/internal/tests/grpc" />
+      <root_directory value="$PROJECT_DIR$/lesson10/homework" />
+      <kind value="PACKAGE" />
+      <package value="homework10/internal/tests/grpc" />
+      <directory value="$PROJECT_DIR$" />
+      <filePath value="$PROJECT_DIR$" />
+      <framework value="gotest" />
+      <pattern value="^\QTestValidate\E$" />
+      <method v="2" />
+    </configuration>
+    <configuration default="true" type="GoTestRunConfiguration" factoryName="Go Test">
+      <module name="go-course-for-students" />
+      <working_directory value="$PROJECT_DIR$" />
+      <go_parameters value="-i" />
+      <kind value="DIRECTORY" />
+      <directory value="$PROJECT_DIR$" />
+      <filePath value="$PROJECT_DIR$" />
+      <framework value="gotest" />
+      <method v="2" />
+    </configuration>
+    <configuration name="go test homework10/internal/tests" type="GoTestRunConfiguration" factoryName="Go Test" temporary="true" nameIsGenerated="true">
+      <module name="go-course-for-students" />
+      <working_directory value="$PROJECT_DIR$/lesson10/homework/internal/tests" />
+      <root_directory value="$PROJECT_DIR$/lesson10/homework" />
+      <kind value="PACKAGE" />
+      <package value="homework10/internal/tests" />
+      <directory value="$PROJECT_DIR$" />
+      <filePath value="$PROJECT_DIR$" />
+      <framework value="gotest" />
+      <method v="2" />
+    </configuration>
+    <configuration name="go test tests" type="GoTestRunConfiguration" factoryName="Go Test" temporary="true" nameIsGenerated="true">
+      <module name="go-course-for-students" />
+      <working_directory value="$PROJECT_DIR$/lesson10/homework/internal/tests" />
+      <go_parameters value="-v -coverpkg=homework10/internal/ports/httpgin,homework10/internal/adapters,homework10/internal/app,homework10/internal/entities,homework10/internal/ports/grpc" />
+      <root_directory value="$PROJECT_DIR$/lesson10/homework" />
+      <kind value="DIRECTORY" />
+      <directory value="$PROJECT_DIR$/lesson10/homework/internal/tests" />
+      <filePath value="$PROJECT_DIR$" />
+      <framework value="gotest" />
+      <method v="2" />
+    </configuration>
+    <configuration name="gobench homework10/internal/adapters" type="GoTestRunConfiguration" factoryName="Go Test" temporary="true" nameIsGenerated="true">
+      <module name="go-course-for-students" />
+      <working_directory value="$PROJECT_DIR$/lesson10/homework/internal/adapters" />
+      <root_directory value="$PROJECT_DIR$/lesson10/homework" />
+      <kind value="PACKAGE" />
+      <package value="homework10/internal/adapters" />
+      <directory value="$PROJECT_DIR$" />
+      <filePath value="$PROJECT_DIR$" />
+      <framework value="gobench" />
+      <method v="2" />
+    </configuration>
+    <list>
+      <item itemvalue="Go Test.TestSuiteRunner in homework10/internal/tests/httpgin" />
+      <item itemvalue="Go Test.TestValidate in homework10/internal/tests/grpc" />
+      <item itemvalue="Go Test.go test homework10/internal/tests" />
+      <item itemvalue="Go Test.gobench homework10/internal/adapters" />
+      <item itemvalue="Go Test.go test tests" />
+    </list>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Go Test.go test tests" />
+        <item itemvalue="Go Test.TestSuiteRunner in homework10/internal/tests/httpgin" />
+        <item itemvalue="Go Test.gobench homework10/internal/adapters" />
+        <item itemvalue="Go Test.TestValidate in homework10/internal/tests/grpc" />
+        <item itemvalue="Go Test.go test homework10/internal/tests" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="VgoProject">
+    <settings-migrated>true</settings-migrated>
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
+          <url>file://$PROJECT_DIR$/lesson9/homework/internal/app/adapp.go</url>
+          <line>76</line>
+          <option name="timeStamp" value="2" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
+          <url>file://$PROJECT_DIR$/lesson9/homework/internal/adapters/adrepo/repo.go</url>
+          <line>65</line>
+          <option name="timeStamp" value="7" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
+          <url>file://$PROJECT_DIR$/lesson9/homework/internal/adapters/adrepo/repo.go</url>
+          <line>75</line>
+          <option name="timeStamp" value="8" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
+          <url>file://$PROJECT_DIR$/lesson10/homework/internal/ports/httpgin/userhandlers.go</url>
+          <line>118</line>
+          <option name="timeStamp" value="15" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
+          <url>file://$PROJECT_DIR$/lesson10/homework/internal/tests/httpgin/utils.go</url>
+          <line>342</line>
+          <option name="timeStamp" value="16" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
+          <url>file://$PROJECT_DIR$/lesson10/homework/internal/ports/grpc/server.go</url>
+          <line>151</line>
+          <option name="timeStamp" value="17" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
+          <url>file://$PROJECT_DIR$/lesson10/homework/internal/ports/httpgin/userhandlers.go</url>
+          <line>98</line>
+          <option name="timeStamp" value="19" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
+          <url>file://$PROJECT_DIR$/lesson10/homework/internal/ports/grpc/server.go</url>
+          <line>110</line>
+          <option name="timeStamp" value="20" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
+          <url>file://$PROJECT_DIR$/lesson10/homework/internal/app/adapp.go</url>
+          <line>86</line>
+          <option name="timeStamp" value="21" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
+          <url>file://$PROJECT_DIR$/lesson10/homework/internal/ports/grpc/server.go</url>
+          <line>177</line>
+          <option name="timeStamp" value="22" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
+          <url>file://$PROJECT_DIR$/lesson10/homework/internal/ports/httpgin/userhandlers.go</url>
+          <line>90</line>
+          <option name="timeStamp" value="31" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
+          <url>file://$PROJECT_DIR$/lesson10/homework/internal/tests/suit_test.go</url>
+          <line>123</line>
+          <option name="timeStamp" value="32" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
+          <url>file://$PROJECT_DIR$/lesson10/homework/internal/adapters/adrepo/repo.go</url>
+          <line>31</line>
+          <option name="timeStamp" value="33" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/go_course_for_students$TestCreateUser_in_homework10_internal_app_mocks.out" NAME="TestCreateUser in homework10/internal/app/mocks Coverage Results" MODIFIED="1684004536668" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="GoCoverage" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
+    <SUITE FILE_PATH="coverage/go_course_for_students$go_test_internal.out" NAME="go test internal Coverage Results" MODIFIED="1683986998130" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="GoCoverage" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
+    <SUITE FILE_PATH="coverage/go_course_for_students$TestSereverError_in_homework10_internal_tests_grpc.out" NAME="TestSereverError in homework10/internal/tests/grpc Coverage Results" MODIFIED="1684005407486" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="GoCoverage" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
+    <SUITE FILE_PATH="coverage/go_course_for_students$go_test_homework10_internal_tests.out" NAME="go test homework10/internal/tests Coverage Results" MODIFIED="1683987272480" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="GoCoverage" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
+    <SUITE FILE_PATH="coverage/go_course_for_students$TestDeleteNonExistedUser_in_homework10_internal_tests_httpgin.out" NAME="TestDeleteNonExistedUser in homework10/internal/tests/httpgin Coverage Results" MODIFIED="1683992851838" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="GoCoverage" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
+    <SUITE FILE_PATH="coverage/go_course_for_students$TestUpdateAdByNotOwner_in_homework10_internal_tests_grpc.out" NAME="TestUpdateAdByNotOwner in homework10/internal/tests/grpc Coverage Results" MODIFIED="1683995297153" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="GoCoverage" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
+    <SUITE FILE_PATH="coverage/go_course_for_students$go_test_tests__1_.out" NAME="go test tests (1) Coverage Results" MODIFIED="1683986934412" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="GoCoverage" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
+    <SUITE FILE_PATH="coverage/go_course_for_students$TestValidate_in_homework10_internal_tests_grpc.out" NAME="TestValidate in homework10/internal/tests/grpc Coverage Results" MODIFIED="1683999150203" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="GoCoverage" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
+    <SUITE FILE_PATH="coverage/go_course_for_students$go_test_tests.out" NAME="go test tests Coverage Results" MODIFIED="1684131288647" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="GoCoverage" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
+    <SUITE FILE_PATH="coverage/go_course_for_students$go_test_lesson10.out" NAME="go test lesson10 Coverage Results" MODIFIED="1683987018219" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="GoCoverage" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
+    <SUITE FILE_PATH="coverage/go_course_for_students$TestDeleteNotExistedAd_in_homework10_internal_tests_grpc.out" NAME="TestDeleteNotExistedAd in homework10/internal/tests/grpc Coverage Results" MODIFIED="1683995682597" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="GoCoverage" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
+    <SUITE FILE_PATH="coverage/go_course_for_students$TestCreateUser_in_homework10_internal_tests_grpc.out" NAME="TestCreateUser in homework10/internal/tests/grpc Coverage Results" MODIFIED="1684004982892" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="GoCoverage" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
+    <SUITE FILE_PATH="coverage/go_course_for_students$TestSuiteRunner_in_homework10_internal_tests.out" NAME="TestSuiteRunner in homework10/internal/tests Coverage Results" MODIFIED="1684010498048" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="GoCoverage" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
+    <SUITE FILE_PATH="coverage/go_course_for_students$TestGetAd_in_homework10_internal_tests_grpc.out" NAME="TestGetAd in homework10/internal/tests/grpc Coverage Results" MODIFIED="1683999205817" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="GoCoverage" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
+  </component>
+</project>
