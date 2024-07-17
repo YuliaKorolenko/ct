@@ -1,0 +1,3 @@
+/Users/yulkorolenko/Desktop/BioInf/8Viterbi/cmake-build-debug/CMakeFiles/Viterbi.dir
+/Users/yulkorolenko/Desktop/BioInf/8Viterbi/cmake-build-debug/CMakeFiles/edit_cache.dir
+/Users/yulkorolenko/Desktop/BioInf/8Viterbi/cmake-build-debug/CMakeFiles/rebuild_cache.dir

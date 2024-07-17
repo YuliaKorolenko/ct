@@ -1,0 +1,13 @@
+# ninja log v5
+1174	1237	1685796029525475318	RandomizedMotifSearch	6720ffd23ddec1d8
+1	1174	1685796029458560465	CMakeFiles/RandomizedMotifSearch.dir/main.cpp.o	19479cf1bcf18755
+2	1497	1685953754957346694	CMakeFiles/RandomizedMotifSearch.dir/main.cpp.o	f69bd5aab1c21b13
+1498	1596	1685953755065814609	RandomizedMotifSearch	6720ffd23ddec1d8
+1	1503	1685953797397420719	CMakeFiles/RandomizedMotifSearch.dir/main.cpp.o	f69bd5aab1c21b13
+1504	1571	1685953797471311493	RandomizedMotifSearch	6720ffd23ddec1d8
+1	1311	1685953840062314458	CMakeFiles/RandomizedMotifSearch.dir/main.cpp.o	f69bd5aab1c21b13
+1312	1382	1685953840138645431	RandomizedMotifSearch	6720ffd23ddec1d8
+2	1208	1685953932852794679	CMakeFiles/RandomizedMotifSearch.dir/main.cpp.o	f69bd5aab1c21b13
+1209	1285	1685953932935003874	RandomizedMotifSearch	6720ffd23ddec1d8
+1	1210	1685955447768054741	CMakeFiles/RandomizedMotifSearch.dir/main.cpp.o	f69bd5aab1c21b13
+1211	1281	1685955447846128746	RandomizedMotifSearch	6720ffd23ddec1d8

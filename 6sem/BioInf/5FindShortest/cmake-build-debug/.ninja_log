@@ -1,0 +1,7 @@
+# ninja log v5
+1006	1072	1685882814314402102	FindShortest	cbf9dee8939071fe
+2	1006	1685882814243382625	CMakeFiles/FindShortest.dir/main.cpp.o	d8e81bfc2a8d762d
+2	1049	1685954509376984285	CMakeFiles/FindShortest.dir/main.cpp.o	8df6b3a873f5f6a4
+1049	1115	1685954509448640018	FindShortest	cbf9dee8939071fe
+2	1870	1685954518877076201	CMakeFiles/FindShortest.dir/main.cpp.o	8df6b3a873f5f6a4
+1870	1978	1685954518993985768	FindShortest	cbf9dee8939071fe

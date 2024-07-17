@@ -1,0 +1,3 @@
+/Users/yulkorolenko/Desktop/BioInf/4AffinageGap/cmake-build-debug/CMakeFiles/AffinageGap.dir
+/Users/yulkorolenko/Desktop/BioInf/4AffinageGap/cmake-build-debug/CMakeFiles/edit_cache.dir
+/Users/yulkorolenko/Desktop/BioInf/4AffinageGap/cmake-build-debug/CMakeFiles/rebuild_cache.dir
