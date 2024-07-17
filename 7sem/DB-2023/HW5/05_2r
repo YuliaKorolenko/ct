@@ -1,0 +1,1 @@
+π{StudentName, CourseName} ((π{StudentName, StudentId, CourseId}(Students ⋈ Plan) diff (π{StudentName, StudentId, CourseId}(Students ⋈ Marks))) ⋈ Courses)

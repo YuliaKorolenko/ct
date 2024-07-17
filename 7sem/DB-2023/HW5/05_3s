@@ -1,0 +1,10 @@
+select StudentName, CourseName
+from (select StudentName, StudentId, CourseId
+from Students
+natural join Plan
+except select StudentName, StudentId, CourseId
+from Students
+natural join Marks
+where Mark = 5
+or Mark = 4) Without
+natural join Courses

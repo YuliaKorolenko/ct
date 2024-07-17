@@ -1,0 +1,51 @@
+ВТОРАЯ НОРМАЛЬНАЯ ФОРМА
+
+Звездочкой указаны фз, которые на данном этапе не удовлетворяют 2нф
+*StudentId → StudentName, GroupId, GroupName;
+GroupId → GroupName;
+GroupName → GroupId;
+*CourseId → CourseName;
+LecturerId → LecturerName;
+StudentId, CourseId → Mark;
+*GroupId, CourseId → LecturerId, LecturerName
+
+Отношение 0, не удовлетворяет 2нф 
+Разбиваем по GroupId, CourseId → LecturerId, LecturerName
+ (~StudentId, StudentName, GroupId, GroupName, ~CourseId, CourseName, LecturerId, LecturerName, Mark)
+=> (~CourseId, GroupId, LecturerId, LecturerName) (~StudentId, StudentName, GroupId, GroupName, ~CourseId, CourseName, Mark)
+
+**После каждого разбиения находим в получившихся отношениях ключи, ключи помечаются ~
+
+Отношение 1 (~CourseId, ~GroupId, LecturerId, LecturerName) удовлетворяет 2нф, оставляем.
+{CourseId, GroupId}+ = {CourseId, GroupId, LecturerId, LecturerName} + минимальный по включению => ключ. Аналогично с оставшимися отношениями.
+
+Отношение 2, не удовлетворяет 2нф 
+Распространяющиеся ФЗ:
+*StudentId → StudentName, GroupId, GroupName;
+GroupId → GroupName;
+GroupName → GroupId;
+*CourseId → CourseName;
+StudentId, CourseId → Mark;
+
+Разбиваем по  StudentId → StudentName, GroupId, GroupName
+(~StudentId, StudentName, GroupId, GroupName, ~CourseId, CourseName, Mark) =>
+(~StudentId, StudentName, GroupId, GroupName) (~StudentId, ~CourseId, CourseName, Mark)
+
+Отношение 3 (~StudentId, StudentName, GroupId, GroupName) удовлетворяет 2нф, оставляем 
+
+Отношение 4, не удовлетворяет 2нф 
+Распространяющиеся ФЗ:
+*CourseId → CourseName;
+StudentId, CourseId → Mark;
+Разбиваем по CourseId → CourseName;
+(~StudentId, ~CourseId, CourseName, Mark) =>
+(~StudentId, ~CourseId, Mark) (~CourseId, CourseName)
+
+Отношение 5 (~StudentId, ~CourseId, Mark) удовлетворяет 2нф, оставляем
+
+Отношение 6 (~CourseId, CourseName) удовлетворяет 2нф, оставляем
+
+ИТОГ
+(StudentId, StudentName, GroupId, GroupName, CourseId, CourseName, LecturerId, LecturerName, Mark) => (CourseId, GroupId, LecturerId, LecturerName); (StudentId, StudentName, GroupId, GroupName); (StudentId, CourseId, Mark); (CourseId, CourseName).
+
+

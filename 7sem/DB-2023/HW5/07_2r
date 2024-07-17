@@ -1,0 +1,1 @@
+π{GroupName, CourseName}(π{GroupId, CourseId}(π{CourseId, StudentId}(Marks) gd π{StudentId, GroupId}(Students)) ⋈ Groups ⋈ Courses)

@@ -1,0 +1,8 @@
+select GroupName, SumMark
+from Groups
+left outer join (
+    select GroupId, sum(cast(Mark as double)) as SumMark
+    from Marks
+    natural join Students
+    group by GroupId
+) SumMarks on Groups.GroupId = SumMarks.GroupId;

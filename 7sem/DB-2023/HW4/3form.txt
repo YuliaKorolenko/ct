@@ -1,0 +1,60 @@
+ТРЕТЬЯ НОРМАЛЬНАЯ ФОРМА
+
+Отношение 0, не удволетворяет 3нф
+Распространяющиеся ФЗ:
+GroupId, CourseId → LecturerId, LecturerName
+LecturerId → LecturerName;
+(~CourseId, ~GroupId, LecturerId, LecturerName)
+
+Преобразуем фз
+1. Расщепим правые части
+GroupId, CourseId → LecturerId
+GroupId, CourseId → LecturerName
+LecturerId → LecturerName;
+
+2. Удаляем атрибуты
+CourseId GroupId -> LecturerId
+{CourseId}+ = {CourseId, CourseName}
+{GroupId}+ = {GroupId, GroupName} 
+Не получили LecturerId, следовательно нельзя ничего удалить. Аналогично с LecturerName.
+
+3. Теперь попробуем удалить правила
+{GroupId, CourseId}+s\{GroupId, CourseId → LecturerId} = {GroupId, CourseId, LecturerName}
+Нельзя удалять правило, так как не смогли получить LecturerId
+
+{LecturerId}+s\{LecturerId → LecturerName} = {LecturerId, LecturerName}
+Нельзя удалять правило, так как не смогли получить GroupId, CourseId
+
+{GroupId, CourseId}+s\{GroupId, CourseId → LecturerName} = {GroupId, CourseId, LecturerId, LecturerName}
+Удаляем правило GroupId, CourseId → LecturerName
+
+Результат:
+GroupId, CourseId → LecturerId
+LecturerId → LecturerName
+
+разбиваем по LecturerId → LecturerName
+(~CourseId, ~GroupId, LecturerId, LecturerName) => (~CourseId, ~GroupId, LecturerId); (~LecturerId, LecturerName).
+
+Отношение 0.0 (~CourseId, GroupId, LecturerId) удволетворяет 3нф
+Отношение 0.1 (~LecturerId, LecturerName) удволетворяет 3нф
+
+Отношение 1, не удволетворяет 3нф
+Распространяющиеся ФЗ:
+StudentId → StudentName, GroupId, GroupName;
+GroupId → GroupName;
+GroupName → GroupId;
+(~StudentId, StudentName, GroupId, GroupName)
+
+Разбиваем по GroupId → GroupName
+(~StudentId, StudentName, GroupId, GroupName) => (~StudentId, StudentName, GroupId) (~GroupId, ~~GroupName)
+
+Отношение 1.1 (~StudentId, StudentName, GroupId) удволетворяет 3нф
+Отношение 1.2 (~GroupId, ~GroupName) удволетворяет 3нф
+Отношение 2 (~StudentId, ~CourseId, Mark) удволетворяет 3нф
+Отношение 3 (~CourseId, CourseName) удволетворяет 3нф
+
+Результат:
+(CourseId, GroupId, LecturerId, LecturerName) => (CourseId, GroupId, LecturerId); (LecturerId, LecturerName).
+(StudentId, StudentName, GroupId, GroupName) => (StudentId, StudentName, GroupId); (GroupId, GroupName).
+(StudentId, CourseId, Mark) => (StudentId, CourseId, Mark).
+(CourseId, CourseName) => (CourseId, CourseName).

@@ -1,0 +1,30 @@
+НОРМАЛЬНАЯ ФОРМА БОЙСА-КОДДА
+
+Отношение 0 (~CourseId, ~GroupId, LecturerId) удволетворяет НФБК
+Распространяющаяся ФЗ:
+GroupId, CourseId → LecturerId
+{CourseId, GroupId}+ = {CourseId, GroupId, LecturerId}
+
+**аналогично ключи помечаются ~ или ~~(если ключей больше одного)
+
+Отношение 1 (~LecturerId, LecturerName) удволетворяет 5НФ по Теореме Дейта-Фейгина 1
+3НФ + все ключи простые
+
+Отношение 2 (~StudentId, StudentName, GroupId) удволетворяет 5НФ по ТДФ1
+
+Отношение 3 (~GroupId, ~~GroupName) удволетворяет 5НФ по ТДФ1 3Нф + два простых ключа
+
+Отношение 4 (~StudentId, ~CourseId, Mark)удволетворяет НФБК
+Распространяющаяся ФЗ:
+StudentId, CourseId → Mark;
+{StudentId, CourseId}+ = {StudentId, CourseId, Mark}
+
+Отношение 5  (CourseId, CourseName) удволетворяет 5НФ по ТДФ1
+
+Результат
+(CourseId, GroupId, LecturerId) => (CourseId, GroupId, LecturerId).
+(LecturerId, LecturerName) => (LecturerId, LecturerName).
+(StudentId, StudentName, GroupId) => (StudentId, StudentName, GroupId).
+(GroupId, GroupName) => (GroupId, GroupName).
+(StudentId, CourseId, Mark) => (StudentId, CourseId, Mark).
+(CourseId, CourseName) => (CourseId, CourseName).

@@ -1,0 +1,26 @@
+select CourseId, GroupId
+from (
+    select CourseId
+    from Marks
+) as MarkCourses
+cross join (
+    select GroupId
+    from Students
+) as StudentsGroups
+except
+select CourseId, GroupId
+from (
+    select CourseId, StudentId, GroupId
+    from (
+        select CourseId
+        from Marks
+    ) as MarkCourses
+    cross join (
+        select GroupId, StudentId
+        from Students
+    ) as StudentsInfo
+    except
+    select CourseId, StudentId, GroupId
+    from Marks
+    natural join Students
+) as DividerStudents;

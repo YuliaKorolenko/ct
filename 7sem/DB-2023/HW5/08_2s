@@ -1,0 +1,7 @@
+select StudentName, SumMark
+from Students
+left outer join (
+    select StudentId, sum(Mark) as SumMark
+    from Marks
+    group by StudentId
+) AvgMarks on Students.StudentId = AvgMarks.StudentId;

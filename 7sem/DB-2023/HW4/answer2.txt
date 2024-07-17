@@ -1,0 +1,33 @@
+insert into Groups
+    (GroupId, GroupName) values
+    (1, 'M34341'),
+    (2, 'M34351'),
+    (3, 'M34361'); 
+
+insert into Students
+    (StudentId, StudentName, GroupId) values
+    (1, 'Maksim Alzhanov', 1),
+    (2, 'Artem Koton', 2),
+    (3, 'Anna Suris', 2);
+
+insert into Lectures
+    (LectureId, LectureName) values
+    (1, 'Ivan Ivanovich Ivanov'),
+    (2, 'Peter Petrovich Petrov'); 
+
+insert into Courses
+    (CourseId, CourseName) values
+    (1, 'Mathematical analysis'),
+    (2, 'Linear Algebra'); 
+
+insert into LecturesLinks
+    (GroupId, CourseId, LectureId) values
+     (1, 2, 1),
+     (2, 1, 2),
+     (2, 2, 1);
+
+insert into Marks
+    (Mark, StudentId, CourseId) values
+    (33.20, 1, 2),
+    (64.50, 2, 1),
+    (4.00, 2, 2); 

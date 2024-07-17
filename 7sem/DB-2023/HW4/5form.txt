@@ -1,0 +1,64 @@
+ПЯТАЯ НОРМАЛЬНАЯ ФОРМА
+
+Отношение (~LecturerId, LecturerName) уже 5нф из пред пункта
+Отношение (~StudentId, StudentName, GroupId) уже 5нф из пред пункта
+Отношение (~GroupId, ~~GroupName) уже 5нф из пред пункта
+Отношение (~CourseId, CourseName) уже 5нф из пред пункта
+
+Рассмотрим (~StudentId, ~CourseId, Mark)
+Для начала найдем все нетривиальные ЗС => мощность каждого xi <= 2
+Также мощность каждого xi > 1, так как можно выкинуть этот элемент и ничего не изменится
+Получается мощность каждого элемента должна быть равна 2
+
+{(StudentId, Mark) (StudentId, CourseId) (Mark, CourseId)}
+
+Контрпример
+StudentId | CourseId | Mark
+1 | 2 | 60
+2 | 3 | 60
+
+StudentId | CourseId
+1 | 2
+2 | 3 
+
+StudentId | Mark
+1  | 60
+2 | 60
+
+CourseId | Mark
+2 | 60
+3 | 60
+
+Появляются дополнительные строки при пересечении 
+Например 1 3 60 и 2 2 60
+Следовательно, не существует НСЗ => 5нф
+
+Рассмотрим отношение (~CourseId, ~GroupId, LecturerId) 
+Аналогично, только одна потенциальная СЗ
+{(CourseId, GroupId) (CourseId, LecturerId) (LecturerId, GroupId)}
+Контрпример
+CourseId | GroupId | LecturerId
+1 | 2 | 4
+2 | 3 | 4
+
+CourseId | GroupId
+1 | 2
+2 | 3 
+
+CourseId | LecturerId
+1  | 4
+2 | 4
+
+GroupId | LecturerId
+2 | 4
+3 | 4
+
+Также появляются записи 1 3 4, 2 2 4 => не существует СЗ => 5нф
+
+Результат:
+(CourseId, GroupId, LecturerId) => (CourseId, GroupId, LecturerId).
+(LecturerId, LecturerName) => (LecturerId, LecturerName).
+(StudentId, StudentName, GroupId) => (StudentId, StudentName, GroupId).
+(GroupId, GroupName) => (GroupId, GroupName).
+(StudentId, CourseId, Mark) => (StudentId, CourseId, Mark).
+(CourseId, CourseName) => (CourseId, CourseName).

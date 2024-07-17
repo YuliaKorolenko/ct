@@ -1,0 +1,49 @@
+create database UNI;
+
+use UNI;
+
+create table Groups ( 
+    GroupId int not null, 
+    GroupName varchar(10) not null, 
+    primary key (GroupId),
+    constraint "GroupName" unique (GroupName)
+);
+
+create table Lectures (
+    LectureId int not null,
+    LectureName varchar(50) not null,
+    primary key (LectureId)
+);
+
+create table Students (
+    StudentId int not null,
+    StudentName varchar(50) not null,
+    GroupId int not null,
+    primary key (StudentId),
+    foreign key (GroupId) references Groups(GroupId)
+);
+
+create table Courses (
+    CourseId int not null,
+    CourseName varchar(30) not null,
+    primary key (CourseId)
+);
+
+create table Marks (
+    Mark decimal(5,2) not null CHECK (Mark >= 0 AND Mark <= 100),
+    StudentId int not null,
+    CourseId int not null,
+    primary key (StudentId, CourseId),
+    foreign key (StudentId) references Students(StudentId),
+    foreign key (CourseId) references Courses(CourseId)
+);
+
+create table LecturesLinks (
+    GroupId int not null,
+    CourseId int not null,
+    LectureId int not null,
+    primary key (GroupId, CourseId),
+    foreign key (GroupId) references Groups(GroupId),
+    foreign key (CourseId) references Courses(CourseId),
+    foreign key (LectureId) references Lectures(LectureId)
+);

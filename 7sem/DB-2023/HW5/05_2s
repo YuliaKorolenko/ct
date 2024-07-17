@@ -1,0 +1,8 @@
+select StudentName, CourseName
+from (select StudentName, StudentId, CourseId
+from Students
+natural join Plan
+except select StudentName, StudentId, CourseId
+from Students
+natural join Marks) WhithoutMark
+natural join Courses

@@ -1,0 +1,82 @@
+ЧЕТВЕРТАЯ НОРМАЛЬНАЯ ФОРМА
+Рассмотрим отношение (~CourseId, ~GroupId, LecturerId) 
+Распространяющиеся ФЗ:
+GroupId, CourseId → LecturerId
+
+Не рассматриваем тривиальные, рассматриваем только те, где мощность x = 0 или 1
+_ ->> LecturerId GroupId | CourseId
+_ ->> LecturerId CourseId | GroupId
+_ ->> CourseId GroupId | LecturerId
+
+Контрпример для всех, где мощность x = 0
+CourseId | GroupId | LecturerId
+1               | M3435   |  2
+2              | M3434   |  1
+
+Теперь рассмотрим возможные мз, где мощность x = 1
+LecturerId ->> GroupId | CourseId
+Контрпример(один лектор может вести у разных групп разные курсы)
+LecturerId | GroupId | CourseId
+1                 | M3434  | 3
+1                 | M3435  | 2
+
+GroupId ->> CourseId | LecturerId
+Контрпример(у одной группы разные курсы с разными лекторами)
+GroupId | CourseId | LecturerId
+M3434  | 1               | 3
+M3434  | 2              | 4
+
+CourseId ->> GroupId | LecturerId
+Контрпример(один курс могут вести разные лекторы у разных групп)
+CourseId | GroupId | LecturerId
+1               | M3435   |  2
+1               | M3434   |  1
+
+Не найдены нетривиальные МЗ, следовательно соответствует 4НФ
+
+Отношение (~LecturerId, LecturerName) уже 5НФ из пред пункта
+Отношение (~StudentId, StudentName, GroupId) уже 5НФ из пред пункта
+Отношение (~GroupId, ~~GroupName) уже 5НФ из пред пункта
+Отношение (~CourseId, CourseName) уже 5НФ из пред пункта
+
+Отношение (~StudentId, ~CourseId, Mark)
+Распространяющиеся ФЗ:
+StudentId, CourseId → Mark;
+
+Не рассматриваем тривиальные, рассматриваем только те, где мощность x = 0 или 1
+_ ->> StudentId CourseId | Mark
+_ ->> CourseId Mark | StudentId
+_ ->> Mark GroupId | CourseId
+
+Контрпример для всех, где мощность x = 0
+StudentId | CourseId | Mark
+1                | M3435   |  29
+2               | M3434   |  99
+
+StudentId ->> CourseId, Mark
+Контрпример(у одного студента по разным курсам разные оценки)
+StudentId | CourseId | Mark
+1                | 1              |  29
+1                | 2             |  99
+
+CourseId ->> StudentId, Mark
+Контрпример(по одному курсу у разных студентов разные оценки)
+CourseId | StudentId | Mark
+1              | 2                |  29
+1              | 1                |  99
+
+Mark ->> StudentId, CourseId
+Контрпример(одна оценка по разным курсам у разных учеников)
+Mark |CourseId | StudentId
+100    |  1              | 2                
+100    |  2              | 1                
+
+Не найдены нетривиальные МЗ, следовательно соответствует 4НФ
+
+Результат:
+(CourseId, GroupId, LecturerId) => (CourseId, GroupId, LecturerId).
+(LecturerId, LecturerName) => (LecturerId, LecturerName).
+(StudentId, StudentName, GroupId) => (StudentId, StudentName, GroupId).
+(GroupId, GroupName) => (GroupId, GroupName).
+(StudentId, CourseId, Mark) => (StudentId, CourseId, Mark).
+(CourseId, CourseName) => (CourseId, CourseName).
