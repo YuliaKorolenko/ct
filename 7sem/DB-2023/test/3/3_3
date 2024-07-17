@@ -1,0 +1,2 @@
+select TeamId, :ContestId, current_timestamp as Start
+from (select TeamId from Sessions where ContestId = :ContestId) TeamInContest;

@@ -1,0 +1,8 @@
+select Letterfrom (
+  select Letter, sum(Accepted) as OK     from Runs natural join Sessions
+  where ContestId = :ContestId     group by Letter
+) OkCntwhere OK = (
+    select min(ok)     from (SELECT SUM(Runs.Accepted) as ok 
+    FROM Problems    LEFT JOIN Runs ON Problems.Letter = Runs.Letter
+    NATURAL JOIN Sessions    WHERE ContestId = :ContestId
+    GROUP BY Problems.Letter) MinOkCnt);

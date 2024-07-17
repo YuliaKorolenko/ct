@@ -1,0 +1,17 @@
+select ContestOk.ContestId, ContestOk.Letter 
+from (
+  select ContestId, Letter, count(*) as OK 
+  from Runs natural join Sessions
+  where Accepted = 1 
+  GROUP BY ContestId, Letter
+) ContestOk
+natural join (
+  select ContestId, max(ok) as OK
+  from (
+    select ContestId, Letter, count(*) as ok 
+    from Runs natural join Sessions
+    where Accepted = 1 
+    GROUP BY ContestId, Letter
+  ) contest_best
+  GROUP BY ContestId
+) ContestBest;

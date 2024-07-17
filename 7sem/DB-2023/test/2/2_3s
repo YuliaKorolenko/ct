@@ -1,0 +1,6 @@
+select TeamId
+from Teams
+where TeamId in (select TeamId
+                 from Runs natural join Sessions
+                 where ContestId = :ContestId
+                 and Accepted = 0);

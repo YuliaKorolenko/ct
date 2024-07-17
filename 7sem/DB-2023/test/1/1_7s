@@ -1,0 +1,9 @@
+select SessionId
+from Sessions
+where not exists (select Letter from
+                  Problems
+                  where ContestId = Sessions.ContestId
+                  except
+                  select Letter
+                  from Runs
+                  where SessionId = Sessions.SessionId)

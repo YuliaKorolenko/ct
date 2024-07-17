@@ -1,0 +1,1 @@
+π{RunId, TeamId, SubmitTime, Accepted}((σ{ContestId = :ContestId && Letter = :Letter}(Sessions ⋈ Runs)))

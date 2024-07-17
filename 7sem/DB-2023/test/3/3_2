@@ -1,0 +1,6 @@
+delete from Runs
+where SessionId in (select SessionId 
+                    from Sessions
+                    where ContestId in (select ContestId 
+                                        from Contests
+                                        where ContestName = :ContestName));

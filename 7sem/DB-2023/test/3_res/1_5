@@ -1,0 +1,8 @@
+update Runs
+set Accepted = 0
+where RunId in (select RunId 
+                from Runs
+                natural join (
+                select Letter, SessionId, min(SubmitTime) as SubmitTime
+                from Runs
+                group by SessionId, Letter) LessTime);

@@ -1,0 +1,1 @@
+π{ContestId, Letter}(Problems) diff π{ContestId, Letter}(π{SessionId, Letter, ContestId}(Sessions ⋈ Problems) diff π{SessionId, Letter, ContestId}(σ{Accepted = 1}(Sessions ⋈ Runs)))

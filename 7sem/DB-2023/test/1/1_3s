@@ -1,0 +1,5 @@
+select count(*)
+from Runs natural join (select *
+                        from Sessions
+                        where ContestId = :ContestId)
+where Accepted = 0;

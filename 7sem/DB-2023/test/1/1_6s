@@ -1,0 +1,6 @@
+select TeamName
+from Teams 
+natural join Sessions
+where not exists (select SessionId
+                  from Runs
+                  where Runs.SessionId = Sessions.SessionId)

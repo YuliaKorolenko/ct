@@ -1,0 +1,5 @@
+select RunId, SessionId, Letter, SubmitTime
+from Runs natural join (select *
+                        from Sessions
+                        where ContestId = :ContestId) CurContestId
+where Accepted = 0;

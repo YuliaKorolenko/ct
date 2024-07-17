@@ -1,0 +1,9 @@
+select SessionId
+from Sessions
+except select SessionId 
+        from (select Letter, SessionId 
+        from Sessions natural join Problems
+        except
+        select Letter, SessionId
+        from Runs
+        where Accepted = 1) NotAllAccepted

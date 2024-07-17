@@ -1,0 +1,5 @@
+select distinct TeamId
+from Runs natural join Sessions
+where ContestId = :ContestId
+and Letter = :Letter
+and Accepted = 0;

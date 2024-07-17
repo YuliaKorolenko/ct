@@ -1,0 +1,10 @@
+select ContestId, Letter
+from Problems
+except
+select ContestId, Letter from (select SessionId, Letter, Sessions.ContestId
+                               from Sessions cross join Problems
+                               on Sessions.ContestId = Problems.ContestId
+                               and Sessions.SessionId = SessionId
+                               except 
+                               select SessionId, Letter, ContestId
+                               from Runs natural join Sessions) NoRunsProb;

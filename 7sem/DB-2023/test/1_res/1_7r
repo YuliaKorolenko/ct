@@ -1,0 +1,1 @@
+π{TeamName}((π{TeamId, ContestId, TeamName}(Contests ⋈ Teams)) diff (π{TeamId, ContestId, TeamName}(Sessions ⋈ Runs ⋈ Teams)))

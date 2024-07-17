@@ -1,0 +1,8 @@
+update Runs
+set Accepted = 1
+where RunId in (select RunId
+                from (select SessionId, max(SubmitTime) as SubmitTime
+                      from Runs
+                      where Accepted = 0
+                      group by SessionId) LastRuns 
+                natural join Runs) ResRunId;
