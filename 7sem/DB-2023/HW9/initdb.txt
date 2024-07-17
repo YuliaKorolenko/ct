@@ -1,0 +1,84 @@
+create table Flights(
+    FlightId integer primary key, 
+    FlightTime timestamp not null, 
+    PlaneId integer not null,
+    AllowedRes bool default true,
+    AllowedBuy bool default true
+);
+
+Insert into Flights (FlightId, FlightTime, PlaneId, AllowedRes, AllowedBuy)
+values (0, '2022-01-01 12:00:00', 1, true, true);
+
+Insert into Flights (FlightId, FlightTime, PlaneId, AllowedRes, AllowedBuy)
+values (3, '2024-01-01 12:00:00', 0, true, true);
+
+Insert into Flights (FlightId, FlightTime, PlaneId)
+values (3, '2024-01-01 12:00:00', 0);
+
+Insert into Flights (FlightId, FlightTime, PlaneId, AllowedRes, AllowedBuy)
+values (1, '2024-01-01 12:00:00', 1, true, true);
+
+create table Seats(
+    PlaneId integer not null,
+    SeatNo varchar(4) not null,
+    primary key (PlaneId, SeatNo)
+);
+
+
+create view SeatsForFlights as
+    select FlightId, PlaneId, SeatNo, FlightTime, AllowedRes, AllowedBuy
+        from Flights
+            natural join Seats;
+
+Insert into Seats (PlaneId, SeatNo)
+values (0, '123A');
+
+Insert into Seats (PlaneId, SeatNo)
+values (0, '13A');
+
+Insert into Seats (PlaneId, SeatNo)
+values (0, '1B');
+
+Insert into Seats (PlaneId, SeatNo)
+values (1, '1A');
+Insert into Seats (PlaneId, SeatNo)
+values (1, '1B');
+Insert into Seats (PlaneId, SeatNo)
+values (1, '1C');
+Insert into Seats (PlaneId, SeatNo)
+values (1, '2A');
+Insert into Seats (PlaneId, SeatNo)
+values (1, '2B');
+Insert into Seats (PlaneId, SeatNo)
+values (1, '12C');
+
+
+create table Users(
+    UserId integer primary key,
+    UserName varchar(30),
+    Pass text not null
+);
+
+Insert into Users (UserId, UserName, Pass)
+values (1, 'Юлия Короленко', 'parolll');
+
+CREATE TYPE StatusSeat AS ENUM ('bought', 'reserved');
+
+create table Tickets(
+    FlightId integer not null references Flights,
+    SeatNo varchar(4) not null,
+    UserId integer references Users,
+    Status StatusSeat not null,
+    TimeCompleted timestamp,
+    primary key (FlightId, SeatNo)
+);
+
+Insert into Tickets (FlightId, SeatNo, UserId, Status, TimeCompleted)
+values (0, '123A', 1, 'bought', null);
+
+Insert into Tickets (FlightId, SeatNo, UserId, Status, TimeCompleted)
+values (1, '12C', 1, 'reserved', '2024-01-01 12:00:00');
+
+
+Insert into Tickets (FlightId, SeatNo, Status, TimeCompleted)
+values (1, '1C', 'reserved', '2024-01-01 12:00:00');

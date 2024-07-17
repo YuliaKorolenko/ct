@@ -1,0 +1,35 @@
+7. FlightStat(UserId, Pass, FlightId) — статистика по рейсу: 
+возможность бронирования и покупки,
+число свободных,
+забронированных и проданных мест.
+
+
+create or replace function FlightStat(_UserId int, _Pass text, _FlightId int)
+returns table
+    (
+        AllowReserv   bool,
+        AllowBuy      bool,
+        CountFree     bigint,
+        CountReserved bigint,
+        CountBought   bigint
+    )
+as
+$$
+begin
+    if not CheckUser(_UserId, _Pass)
+    then
+        return query (
+            select T.AllowReserv as AllowReserv,
+                   T.AllowBuy as AllowBuy,
+                   T.CountReserved as CountReserved,
+                   T.CountBought as CountBought,
+                   T.CountFree as CountFree
+            from TicketsStatistics T
+            where UserId = _UserId
+            and T.FlightId = _FlightId
+        );
+    else
+        return;
+    end if;
+end
+$$ language plpgsql;

@@ -1,0 +1,45 @@
+-- проверка, что user сущестует и заходит с правильным паролем
+create or replace function CheckUser(_UserId int, _Pass text)
+    returns boolean
+    language plpgsql
+as
+$$
+begin
+    return exists (select *
+                   from Users
+                   where UserId = _UserId
+                   and Pass = crypt(_Pass, Pass));
+end
+$$;
+
+-- проверка, что такое место существует и на него можно бронировать билеты
+create or replace function CheckFlightForRes(_SeatNo varchar(4), _FlightId int)
+    returns boolean
+    language plpgsql
+as
+$$
+begin
+    return exists (select *
+                    from SeatsForFlights 
+                    where SeatNo = _SeatNo
+                    and FlightId = _FlightId
+                    and AllowedRes = true
+                    and now() < FlightTime - interval '3 days');
+end
+$$;
+
+-- проверка, что такое место существует и на него можно покупать билеты
+create or replace function CheckFlightForBuy(_SeatNo varchar(4), _FlightId int)
+    returns boolean
+    language plpgsql
+as
+$$
+begin
+    return exists (select *
+                    from SeatsForFlights 
+                    where SeatNo = _SeatNo
+                    and FlightId = _FlightId
+                    and AllowedBuy = true
+                    and now() < FlightTime - interval '3 hours');
+end
+$$;

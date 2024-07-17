@@ -1,0 +1,32 @@
+3. ExtendReservation(UserId, Pass, FlightId, SeatNo) — пытается продлить бронь места на трое суток начиная с момента продления. Возвращает истину, если удалось и ложь — в противном случае.
+
+create or replace function ExtendReservation(_UserId int, _Pass text, _FlightId int, _SeatNo varchar(4))
+    returns boolean
+    language plpgsql
+as
+$$
+declare
+    NewTime timestamp;
+begin
+    NewTime = now() + interval '3 day';
+    -- is exist user and exist SeatNo and this user bought this ticket before
+    if not CheckUser(_UserId, _Pass) 
+       or not CheckFlightForRes(_SeatNo, _FlightId)
+       or not exists (select *
+                      from Tickets
+                      where UserId = _UserId
+                      and SeatNo = _SeatNo
+                      and FlightId = _FlightId
+                      and Status = 'reserved'
+                      and TimeCompleted > now())
+    then 
+       return false;
+    end if;
+
+    update Tickets
+    set TimeCompleted = NewTime
+    where SeatNo = _SeatNo
+    and FlightId = _FlightId;
+    return true;
+end
+$$;

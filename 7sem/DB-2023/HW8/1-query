@@ -1,0 +1,8 @@
+-- выбирает всех хорошистов по заданному курсу
+select StudentId, GroupId
+from Students natural join Marks
+where Mark >= (select avg(Mark) from Marks where CourseId = :CourseId)
+and CourseId = :CourseId;
+
+--
+create unique index mcs_index on Marks using btree (Mark, CourseId, StudentId);

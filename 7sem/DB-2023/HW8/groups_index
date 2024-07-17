@@ -1,0 +1,11 @@
+--Является PK, не важна упорядоченность, поэтому hash и unique
+--ДЗ-5.9.4 Средний балл средних баллов студентов каждой группы (GroupName, AvgAvgMark).
+--ДЗ-5.8.3 Суммарный балл каждой группы (GroupName, SumMark).
+--ДЗ-6.6.1 Группы и дисциплины, такие что все студенты группы имеют оценку по предмету, идентификаторы (GroupId, CourseId).
+create unique index gid_g_index on Groups using hash (GroupId);
+
+--Является PK, не важна упорядоченность, поэтому hash и unique
+--ДЗ-5.2.2 Полную информацию о студентах c заданным ФИО (StudentId, StudentName, GroupName по :StudentName).
+--ДЗ-6.1.2 Информацию о студентах учащихся в заданной группе (StudentId, StudentName, GroupId по :GroupName).
+--ДЗ-7.1.2 Удаление студентов, учащихся в группе, заданной названием (GroupName).
+create unique index gname_g_index on Groups using hash (GroupName);

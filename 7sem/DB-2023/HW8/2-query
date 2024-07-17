@@ -1,0 +1,12 @@
+--поиск всех четверокурсников
+select StudentId, StudentName
+from Students
+where GroupId in (select GroupId 
+                  from Groups
+                  where GroupName like '%34%');
+
+-- будем использовать btree, чтобы искать по префиксу
+create index gn_index on Groups using btree (GroupName);
+
+-- тогда удаляем предыдущий индекс c hash
+drop index gname_g_index;

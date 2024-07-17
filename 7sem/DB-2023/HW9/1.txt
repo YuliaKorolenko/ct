@@ -1,0 +1,22 @@
+1. FreeSeats(FlightId) — список мест, доступных для продажи и для бронирования.
+
+create or replace function FreeSeats(_FlightId int)
+    returns table
+        (
+            SeatNo varchar(4)
+        )
+    language plpgsql
+as
+$$
+begin
+    return query select Seats.SeatNo
+                 from Seats
+                 where Seats.PlaneId in (select PlaneId
+                                         from Flights
+                                         where FlightId = _FlightId
+                                         and now() < (FlightTime - INTERVAL '3 days')
+                                         and AllowedBuy
+                                         and AllowedRes)
+                 and Seats.SeatNo in (select SeatsFree.SeatNo from SeatsFree where FlightId = _FlightId);
+end;
+$$;

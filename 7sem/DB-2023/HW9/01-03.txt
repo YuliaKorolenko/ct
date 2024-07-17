@@ -1,0 +1,94 @@
+PostgreSQL 14.9
+
+-- рейсы
+create table Flights(
+    FlightId integer primary key, 
+    FlightTime timestamp not null, 
+    PlaneId integer not null,
+    AllowedRes bool default true,
+    AllowedBuy bool default true
+);
+
+-- сиденья для каждого самолета
+create table Seats(
+    PlaneId integer not null,
+    SeatNo varchar(4) not null,
+    primary key (PlaneId, SeatNo)
+);
+
+-- пользователи, id, имя и захешированный пароль
+create table Users(
+    UserId integer primary key,
+    UserName varchar(30),
+    Pass text not null
+);
+
+-- тип для различия билетов
+CREATE TYPE StatusSeat AS ENUM ('bought', 'reserved');
+
+-- билеты зарезервированные/выкупленные
+create table Tickets(
+    FlightId integer not null references Flights,
+    SeatNo varchar(4) not null,
+    UserId integer references Users,
+    Status StatusSeat not null,
+    TimeCompleted timestamp,
+    primary key (FlightId, SeatNo)
+);
+
+create view SeatsForFlights as
+    select FlightId, PlaneId, SeatNo, FlightTime, AllowedRes, AllowedBuy
+        from Flights
+            natural join Seats;
+
+-- купленные/зарезервированные билеты
+create view OccupiedTickets as
+    select FlightId, SeatNo, UserId, Status, TimeCompleted
+    from Tickets
+    where Status = 'bought' or 
+          (Status = 'reserved' and TimeCompleted > now());
+
+
+-- Судя по тому, как звучит задание и что было сказано на лекции. Я нахожу бронированные и проданные пользователю 
+и свободные для пользователя места.
+create view TicketsStatistics as
+select count(SeatsBought.SeatNo) as CountBought,
+       count(SeatsReserved.SeatNo) as CountReserved,
+       coalesce(StatSeatsFree.CountFree, 0) as CountFree,
+       (Flights.AllowedRes and now() < Flights.FlightTime - interval '3 days') as AllowReserv,
+       (Flights.AllowedBuy and now() < Flights.FlightTime - interval '3 hours') as AllowBuy, 
+       Flights.FlightId as FlightId,
+       Users.UserId as UserId
+from Flights 
+natural left join StatSeatsFree
+cross join Users
+natural left join SeatsBought
+left join SeatsReserved on Flights.FlightId = SeatsReserved.FlightId and Users.UserId = SeatsReserved.UserId
+group by Users.UserId, Flights.FlightId, StatSeatsFree.CountFree;
+
+
+create view SeatsBought as
+select FlightId, UserId, SeatNo
+from Tickets
+where Status = 'bought';
+
+create view SeatsFree as
+select FlightId, SeatNo
+from Seats
+natural join Flights
+except
+select FlightId, SeatNo
+from SeatsBought
+except
+select FlightId, SeatNo
+from SeatsReserved;
+
+create view StatSeatsFree as
+select FlightId, count(SeatNo) as CountFree
+from SeatsFree
+group by FlightId;
+
+create view SeatsReserved as
+select FlightId, SeatNo, UserId
+from Tickets
+where (Status = 'reserved' and TimeCompleted > now());

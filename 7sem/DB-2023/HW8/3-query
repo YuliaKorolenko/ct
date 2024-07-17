@@ -1,0 +1,10 @@
+-- найти группы, у которых ведет лектор заданный курс
+select GroupId
+from Plan
+where CourseId = :CourseId
+and LecturerId in (select LecturerId
+                   from Lecturers
+                   where LecturerName = "Корнеев Г.А.")
+
+-- Используем хэш, так как надо быстро сравнивать и делать in
+create index cl_plan_index ON Plan using hash (CourseId, LecturerId);

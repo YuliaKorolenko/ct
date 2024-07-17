@@ -1,0 +1,26 @@
+4. BuyFree(FlightId, SeatNo) — пытается купить свободное место. Возвращает истину, если удалось и ложь — в противном случае.
+
+create or replace function BuyFree(_FlightId int, _SeatNo varchar(4))
+    returns boolean
+    language plpgsql
+as
+$$
+begin
+    -- exist flights and can buy tickets and SeatNo not occupied
+    if not CheckFlightForBuy(_SeatNo, _FlightId)
+       or _SeatNo in (select SeatNo from OccupiedTickets)
+    then 
+       return false;
+    end if;
+
+    insert into Tickets(SeatNo, FlightId, Status, TimeCompleted)
+    values (_SeatNo, _FlightId, 'bought', now())
+    on conflict (FlightId, SeatNo)
+    do update
+    set 
+        Status = 'bought',
+        TimeCompleted = now(),
+        UserId = null;
+    return true;
+end
+$$;

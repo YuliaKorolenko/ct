@@ -1,0 +1,93 @@
+-- регистрировать человека
+
+create procedure  AddSeller(:SId int, :SName varchar(64), :Password varchar(64))
+    language sql
+    not deterministic
+    modifies sql data
+begin
+    declare salt varchar(64)
+    exec genSalt(salt)
+    insert into S(SId, SName, PHash, PSalt)
+    values :SId, :SName, :PHash, :PSalt
+end
+
+-- добавлять данные, что в определенном городе определенному товару ставим цену и количество. 
+-- Если записи нет, то добавить. Если запись была и 0 количество, то удалить.
+
+create procedure UpdateSGC(_GId, _CId, _Price, _Q, _SId, _Password)
+language sql
+not deterministic
+modifies sql data
+begin
+   if not exists (
+    select * 
+    from S
+    where SId = _SId 
+    and genHash(_Passowrd, PSalt) = PHash
+   )
+    then 
+        raise EXCEPTION "..."
+
+    Q<>0 and if not exists ( // если Q!=0
+        select * 
+        from SGC
+        where SId = _SId
+        and GId = _GId
+        and CId = _CId
+    )    
+    insert into SGC (GId, ...) values (_GId, ...)
+    else if Q = 0 (delete from SGC 
+                    where SId = _SId 
+                    and GId = _GId
+                    and CId = _CId
+                )
+    else update SGC set Price = _Price, Q = _Q
+                    where SId = _SId
+                    and GId = _GId
+                    and CId = _CId
+end
+
+
+-- проверить цену в городе по всем товарам, если по всем меньше, то повышаем на 10%
+
+-- это для одного товара
+begin   
+    exec CheckCredentials(_SId, _Password)
+    update SGC
+    set Price = Price * 1.1
+    where SId = _SId and CId = _CId and GId = _GId
+    and Price < all(select Price from SGC where CId = _CId and GId = _GId and SId <> _SId)
+
+-- это для всех
+declare exit handler for sqlstate not found begin end
+    declare _GId int
+    declare SGCCursor
+        select GId from SGC where SId = _SId and CId = _CId
+    exec checkCredential(_SId, _Passowrd)
+    open SGCCursor
+    loop
+        fetch SGCCursor into _GId
+        exec upPrice(_SId, _CId, ..., _GId)
+    endloop
+
+-- средняя цена товара в городе
+
+create procedure avgPrice(_Gid, _CId)
+begin
+    select avg(Price)
+    from SGC
+    where CId = _CId
+    and GId = _Gid
+    order by Price
+end
+
+-- медианная цена товара
+create procedure medPrice()
+begin
+    set mid = (1 + (select count(*)
+                    from SGC 
+                    where GId = _GId
+                    and CId = _CId) / 2)
+    open PCursor
+    fetch absolute mid PCursor into _Price
+end

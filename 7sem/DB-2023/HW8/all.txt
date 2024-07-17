@@ -1,0 +1,636 @@
+100	100	100	100	100	100	100	100	95	95	100	90	100	90	90	100	100	100	50	90	90	100	90	90	100	90	90	90	0
+1.1 С заданным идентификатором (StudentId, StudentName, GroupId по :StudentId).
+
+select StudentId, StudentName, GroupId 
+from Students 
+where StudentId = :StudentId
+
+1.2 С заданным ФИО (StudentId, StudentName, GroupId по :StudentName).
+
+select StudentId, StudentName, GroupId 
+from Students 
+where StudentName = :StudentName
+
+2.1 Полную информацию о студентах c заданным идентификатором (StudentId, StudentName, GroupName по :StudentId).
+
+select StudentId, StudentName, GroupName 
+from Students natural join Groups 
+where StudentId = :StudentId
+
+2.2 Полную информацию о студентах c заданным ФИО (StudentId, StudentName, GroupName по :StudentName).
+
+select StudentId, StudentName, GroupName 
+from Students natural join Groups 
+where StudentName = :StudentName
+
+3.1 Информацию о студентах с заданной оценкой по дисциплине c заданным идентификатором (StudentId, StudentName, GroupId по :Mark, :CourseId).
+
+select StudentId, StudentName, GroupId 
+from Students
+natural join Marks
+where Mark = :Mark
+and CourseId = :CourseId
+
+3.2 Информацию о студентах с заданной оценкой по дисциплине c заданным названием (StudentId, StudentName, GroupId по :Mark, :CourseName).
+
+select StudentId, StudentName, GroupId
+from Students
+natural join Marks
+natural join Courses
+where Mark = :Mark
+and CourseName = :CourseName
+
+3.3 Информацию о студентах с заданной оценкой по дисциплине, которую у них вёл лектор заданный идентификатором (StudentId, StudentName, GroupId по :Mark, :LecturerId).
+
+select StudentId, StudentName, GroupId
+from Students
+natural join Plan
+natural join Marks
+where Mark = :Mark
+and LecturerId = :LecturerId
+
+3.4 Информацию о студентах с заданной оценкой по дисциплине, которую у них вёл лектор, заданный ФИО (StudentId, StudentName, GroupId по :Mark, :LecturerName).
+
+select StudentId, StudentName, GroupId
+from Students
+natural join Marks
+natural join Plan
+natural join Lecturers
+where Mark = :Mark
+and LecturerName = :LecturerName
+
+3.5 Информацию о студентах с заданной оценкой по дисциплине, которую вёл лектор, заданный идентификатором (StudentId, StudentName, GroupId по :Mark, :LecturerId).
+
+select StudentId, StudentName, GroupId
+from Students 
+natural join Marks
+natural join 
+(select CourseId, LecturerId
+from Plan) LinkLectures 
+where Mark = :Mark
+and LecturerId =:LecturerId
+
+3.6 Информацию о студентах с заданной оценкой по дисциплине, которую вёл лектор, заданный ФИО (StudentId, StudentName, GroupId по :Mark, :LecturerName).
+
+select StudentId, StudentName, GroupId
+from Students 
+natural join Marks
+natural join Lecturers
+natural join
+(select CourseId, LecturerId
+from Plan) LinkLectures 
+where Mark = :Mark
+and LecturerName =:LecturerName
+
+4.1 Информацию о студентах не имеющих оценки по дисциплине cреди всех студентов (StudentId, StudentName, GroupId по :CourseName).
+
+select StudentId, StudentName, GroupId 
+from Students
+except select StudentId, StudentName, GroupId 
+from Students
+natural join Marks
+natural join Courses
+where CourseName = :CourseName
+
+4.2 Информацию о студентах не имеющих оценки по дисциплине cреди студентов, у которых есть эта дисциплина (StudentId, StudentName, GroupId по :CourseName).
+
+select StudentId, StudentName, GroupId
+from Students 
+natural join Plan
+natural join Courses
+where CourseName = :CourseName
+except select StudentId, StudentName, GroupId
+from Students 
+natural join Marks
+natural join Courses
+where CourseName = :CourseName
+
+5.1 Для каждого студента ФИО и названия дисциплин которые у него есть по плану (StudentName, CourseName).
+
+select StudentName, CourseName
+from 
+(select distinct StudentId, StudentName, CourseId, CourseName 
+from Students
+natural join Plan
+natural join Courses) UniqInfo
+
+5.2 Для каждого студента ФИО и названия дисциплин есть, но у него нет оценки (StudentName, CourseName).
+
+select StudentName, CourseName
+from (select StudentName, StudentId, CourseId
+from Students
+natural join Plan
+except select StudentName, StudentId, CourseId
+from Students
+natural join Marks) WhithoutMark
+natural join Courses
+
+5.3 Для каждого студента ФИО и названия дисциплин есть, но у него не 4 или 5 (StudentName, CourseName).
+
+select StudentName, CourseName
+from (select StudentName, StudentId, CourseId
+from Students
+natural join Plan
+except select StudentName, StudentId, CourseId
+from Students
+natural join Marks
+where Mark = 5
+or Mark = 4) Without
+natural join Courses
+
+6.1 Идентификаторы студентов по преподавателю имеющих хотя бы одну оценку у преподавателя (StudentId по :LecturerName).
+
+select distinct StudentId
+from Students
+natural join Marks
+natural join Plan
+natural join Lecturers
+where LecturerName = :LecturerName
+
+6.2 Идентификаторы студентов по преподавателю не имеющих ни одной оценки у преподавателя (StudentId по :LecturerName).
+
+select distinct StudentId
+from Students
+except 
+select distinct StudentId 
+from Students
+natural join Marks
+natural join Plan
+natural join Lecturers
+where LecturerName = :LecturerName
+
+6.3 Идентификаторы студентов по преподавателю имеющих оценки по всем дисциплинам преподавателя (StudentId по :LecturerName).
+
+select StudentId
+from Marks
+except
+select StudentId
+from (select StudentId,CourseId
+      from (select StudentId 
+            from Marks) StudentsQ
+            cross join 
+           (select CourseId 
+            from Plan 
+            natural join Lecturers
+            where LecturerName = :LecturerName) CoursesS
+       except 
+       select StudentId,CourseId
+       from Marks
+) StudentsDiv
+
+6.4 Идентификаторы студентов по преподавателю имеющих оценки по всем дисциплинам преподавателя, которые он вёл у этого студента (StudentId по :LecturerName).
+
+7.1 Группы и дисциплины, такие что все студенты группы имеют оценку по этой дисциплине идентификаторы (GroupId, CourseId).
+
+select CourseId, GroupId
+from (
+    select CourseId
+    from Marks
+) as MarkCourses
+cross join (
+    select GroupId
+    from Students
+) as StudentsGroups
+except
+select CourseId, GroupId
+from (
+    select CourseId, StudentId, GroupId
+    from (
+        select CourseId
+        from Marks
+    ) as MarkCourses
+    cross join (
+        select GroupId, StudentId
+        from Students
+    ) as StudentsInfo
+    except
+    select CourseId, StudentId, GroupId
+    from Marks
+    natural join Students
+) as DividerStudents;
+
+7.2 Группы и дисциплины, такие что все студенты группы имеют оценку по этой дисциплине названия (GroupName, CourseName).
+
+select GroupName, CourseName
+from (
+    select CourseId, GroupId
+    from (
+        select CourseId
+        from Marks
+    ) as MarkCourses
+    cross join (
+        select GroupId
+        from Students
+    ) as StudentsGroups
+    except
+    select CourseId, GroupId
+    from (
+        select CourseId, StudentId, GroupId
+        from (
+            select CourseId
+            from Marks
+        ) as MarkCourses
+        cross join (
+            select GroupId, StudentId
+            from Students
+        ) as StudentsInfo
+        except
+        select CourseId, StudentId, GroupId
+        from Marks
+        natural join Students
+    ) as DividerStudents
+) as GroupsInfo
+natural join Groups
+natural join Courses;
+
+8.1 Суммарный балл одного студента (SumMark по :StudentId).
+
+select sum(Mark) as SumMark
+from Marks
+where StudentId = :StudentId;
+
+8.2 Суммарный балл каждого студента (StudentName, SumMark).
+
+select StudentName, SumMark
+from Students
+left outer join (
+    select StudentId, sum(Mark) as SumMark
+    from Marks
+    group by StudentId
+) AvgMarks on Students.StudentId = AvgMarks.StudentId;
+
+8.3 Суммарный балл каждой группы (GroupName, SumMark).
+
+select GroupName, SumMark
+from Groups
+left outer join (
+    select GroupId, sum(cast(Mark as double)) as SumMark
+    from Marks
+    natural join Students
+    group by GroupId
+) SumMarks on Groups.GroupId = SumMarks.GroupId;
+
+9.1 Средний балл одного студента (AvgMark по :StudentId).
+
+select avg(cast(Mark as double)) as AvgMark
+from Marks
+where StudentId = :StudentId;
+
+9.2 Средний балл каждого студента (StudentName, AvgMark).
+
+select StudentName, AvgMark
+from Students
+left outer join (
+    select StudentId, avg(cast(Mark as double)) as AvgMark
+    from Marks
+    group by StudentId
+) AvgMarks on Students.StudentId = AvgMarks.StudentId;
+
+9.3 Средний балл каждой группы (GroupName, AvgMark).
+
+select GroupName, AvgMark
+from Groups
+left outer join (
+    select GroupId, avg(cast(Mark as double)) as AvgMark
+    from Marks
+    natural join Students
+    group by GroupId
+) AvgMarks on Groups.GroupId = AvgMarks.GroupId;
+
+9.4 Средний балл средних баллов студентов каждой группы (GroupName, AvgAvgMark).
+
+select Groups.GroupName, AvgAvgMark 
+from Groups
+left outer join (
+    select GroupId, avg(cast(AvgMark as double)) as AvgAvgMark
+    from (
+        select GroupId, AvgMark
+             from (Students
+             natural join (select StudentId, avg(cast(Mark as double)) as AvgMark
+             from Marks
+             group by StudentId) AvgByStudents
+             )
+    ) AvgMarks
+    group by GroupId
+) AvgAvgMarks on Groups.GroupId = AvgAvgMarks.GroupId;
+
+10.1 Для каждого студента: число дисциплин, которые у него были, число сданных дисциплин и число несданных дисциплин (StudentId, Total, Passed, Failed).
+
+
+
+
+ДЗ-6
+
+1.1 Информацию о студентах с заданным ФИО (StudentId, StudentName, GroupId по :StudentName).
+
+select StudentId, StudentName, GroupId from Students where StudentName = :StudentName;
+
+1.2 Информацию о студентах учащихся в заданной группе (StudentId, StudentName, GroupId по :GroupName).
+
+select StudentId, StudentName, GroupId 
+from Students 
+where GroupId in (select GroupId from Groups where GroupName = :GroupName);
+
+1.3 Информацию о студентах с заданной оценкой по дисциплине, заданной идентификатором (StudentId, StudentName, GroupId по :Mark, :CourseId).
+
+select StudentId, StudentName, GroupId
+from Students 
+where StudentId in (select StudentId from Marks where CourseId = :CourseId and Mark = :Mark);
+
+1.4 Информацию о студентах с заданной оценкой по дисциплине, заданной названием (StudentId, StudentName, GroupId по :Mark, :CourseName).
+
+select StudentId, StudentName, GroupId
+   from Students 
+   where StudentId in (select StudentId 
+                       from Marks 
+                       where Mark = :Mark and CourseId in (select CourseId 
+                                                           from Courses 
+                                                           where CourseName = :CourseName));
+
+2.1 Полную информацию о студентах для всех студентов (StudentId, StudentName, GroupName).
+
+select StudentId, StudentName, GroupName
+        from Students S, Groups G
+        where S.GroupId = G.GroupId;
+
+2.2 Студентов, не имеющих оценки по дисциплине, заданной идентификатором (StudentId, StudentName, GroupName по :CourseId).
+
+select StudentId, StudentName, GroupName
+   from Students S, Groups G
+   where S.GroupId = G.GroupId
+   and StudentId not in (select StudentId 
+                       from Marks 
+                       where CourseId = :CourseId);
+
+2.3 Студентов, не имеющих оценки по дисциплине, заданной названием (StudentId, StudentName, GroupName по :CourseName).
+
+select StudentId, StudentName, GroupName
+   from Students S, Groups G
+   where S.GroupId = G.GroupId
+   and StudentId not in (select StudentId 
+                         from Marks M, Courses C
+                         where M.CourseId = C.CourseId
+                         and CourseName = :CourseName);
+
+2.4 Студентов, не имеющих оценки по дисциплине, у которых есть эта дисциплина (StudentId, StudentName, GroupName по :CourseId).
+
+select StudentId, StudentName, GroupName
+   from Students S, Groups G
+   where S.GroupId = G.GroupId
+   and StudentId not in (select StudentId 
+                         from Marks
+                         where CourseId = :CourseId)
+   and S.GroupId in (select GroupId 
+                   from Plan
+                   where CourseId = :CourseId);
+
+2.5 Студентов, не имеющих оценки по дисциплине, у которых есть эта дисциплина (StudentId, StudentName, GroupName по :CourseName).
+
+select StudentId, StudentName, GroupName
+   from Students S, Groups G
+   where S.GroupId = G.GroupId
+   and StudentId not in (select StudentId 
+                         from Marks M, Courses C
+                         where M.CourseId = C.CourseId
+                         and CourseName = :CourseName)
+   and S.GroupId in (select GroupId 
+                   from Plan P, Courses C
+                   where P.CourseId = C.CourseId
+                   and CourseName = :CourseName);
+
+3.1 Студенты и дисциплины, такие что у студента была дисциплина (по плану или есть оценка) идентификаторы (StudentId, CourseId).
+
+select StudentId, CourseId
+from Marks
+union
+select StudentId, CourseId
+from Students S, Plan P
+Where S.GroupId = P.GroupId;
+
+3.2 Студенты и дисциплины, такие что у студента была дисциплина (по плану или есть оценка)имя и название (StudentName, CourseName).
+
+select StudentName, CourseName from
+    (select StudentId, CourseId
+     from Marks
+     union
+     select StudentId, CourseId
+     from Students S, Plan P
+     where S.GroupId = P.GroupId) StudentsWithCourse, Students S, Courses C
+where S.StudentId = StudentsWithCourse.StudentId
+and C.CourseId = StudentsWithCourse.CourseId;
+
+4.1 Студенты и дисциплины, такие что дисциплина есть в его плане, и у студента долг по этой дисциплине. Долгом считается отсутствие оценки (StudentName, CourseName).
+
+select StudentName, CourseName
+from Students, Courses
+where exists (select StudentId, CourseId
+              from Plan
+              where Students.GroupId = Plan.GroupId
+              and Courses.CourseId = Plan.CourseId)
+and not exists (select StudentId, CourseId
+                from Marks
+                where Marks.CourseId = Courses.CourseId
+                and Marks.StudentId = Students.StudentId);
+
+4.2 Студенты и дисциплины, такие что дисциплина есть в его плане, и у студента долг по этой дисциплине. Долгом считается оценка не выше 2 (StudentName, CourseName).
+
+select StudentName, CourseName
+from Students, Courses
+where exists (select StudentId, CourseId
+              from Plan
+              where Students.GroupId = Plan.GroupId
+              and Courses.CourseId = Plan.CourseId)
+and exists (select StudentId, CourseId
+            from Marks
+            where Marks.CourseId = Courses.CourseId
+            and Marks.StudentId = Students.StudentId
+            and Mark <= 2);
+
+4.3 Студенты и дисциплины, такие что дисциплина есть в его плане, и у студента долг по этой дисциплине. Долгом считается отсутствие оценки или оценка не выше 2 (StudentName, CourseName).
+
+select StudentName, CourseName
+from Students, Courses
+where exists (select StudentId, CourseId
+              from Plan
+              where Students.GroupId = Plan.GroupId
+              and Courses.CourseId = Plan.CourseId)
+and not exists (select StudentId, CourseId
+            from Marks
+            where Marks.CourseId = Courses.CourseId
+            and Marks.StudentId = Students.StudentId
+            and Mark > 2);
+
+5.1 Идентификаторы студентов по преподавателю, имеющих хотя бы одну оценку у преподавателя (StudentId по :LecturerName).
+
+select distinct S.StudentId
+from Students S, Marks M
+where S.StudentId = M.StudentId
+and CourseId in (select CourseId 
+                 from Plan P, Lecturers L
+                 where P.LecturerId = L.LecturerId
+                 and P.GroupId = S.GroupId
+                 and L.LecturerName = :LecturerName);
+
+5.2 Идентификаторы студентов по преподавателю, не имеющих ни одной оценки у преподавателя (StudentId по :LecturerName).
+
+select distinct StudentId
+from Students S
+where StudentId not in (select distinct S.StudentId
+                        from Students S, Marks M
+                        where S.StudentId = M.StudentId
+                        and CourseId in (select CourseId 
+                                         from Plan P, Lecturers L
+                                         where P.LecturerId = L.LecturerId
+                                         and P.GroupId = S.GroupId
+                                         and L.LecturerName = :LecturerName));
+
+5.3 Идентификаторы студентов по преподавателю, имеющих оценки по всем дисциплинам преподавателя (StudentId по :LecturerName).
+
+select distinct StudentId
+from Students S
+where not exists (select CourseId 
+                  from Plan P, Lecturers L
+                  where P.LecturerId = L.LecturerId
+                  and L.LecturerName = :LecturerName
+                  and CourseId not in (select CourseId 
+                                       from Marks M
+                                       where M.StudentId = S.StudentId));
+
+5.4 Идентификаторы студентов по преподавателю, имеющих оценки по всем дисциплинам преподавателя, которые он вёл у этого студента (StudentId по :LecturerName).
+
+select distinct StudentId
+from Students S
+where not exists (select CourseId 
+                  from Plan P, Lecturers L
+                  where P.LecturerId = L.LecturerId
+                  and L.LecturerName = :LecturerName
+                  and S.GroupId = P.GroupId
+                  and CourseId not in (select CourseId 
+                                       from Marks M
+                                       where M.StudentId = S.StudentId));
+
+6.1 Группы и дисциплины, такие что все студенты группы имеют оценку по предмету, идентификаторы (GroupId, CourseId).
+
+select GroupId, CourseId
+from Groups G, Courses C
+where not exists (select StudentId
+                  from Students S
+                  where S.GroupId = G.GroupId
+                  and not exists (select Mark
+                                  from Marks M
+                                  where M.CourseId = C.CourseId
+                                  and S.StudentId = M.StudentId));
+
+6.2 Группы и дисциплины, такие что все студенты группы имеют оценку по предмету, названия (GroupName, CourseName).
+
+select GroupName, CourseName
+from Groups G, Courses C
+where not exists (select StudentId
+                  from Students S
+                  where S.GroupId = G.GroupId
+                  and not exists (select Mark
+                                  from Marks M
+                                  where M.CourseId = C.CourseId
+                                  and S.StudentId = M.StudentId));
+
+ДЗ-7
+
+1.1 Удаление студентов, учащихся в группе, заданной идентификатором (GroupId).
+
+delete from Students where GroupId = :GroupId;
+
+1.2 Удаление студентов, учащихся в группе, заданной названием (GroupName).
+
+delete from Students 
+where GroupId in (select GroupId 
+                  from Groups 
+                  where GroupName = :GroupName);
+
+1.3 Удаление студентов без оценок.
+
+delete from Students 
+where StudentId not in (select StudentId 
+                        from Marks);
+
+1.4 Удаление студентов, имеющих 3 и более оценки.
+
+delete from Students 
+where StudentId in (select StudentId
+                    from Marks
+                    group by StudentId
+                    having count(*) >= 3);
+
+1.5 Удаление студентов, имеющих 3 и менее оценки.
+
+delete from Students 
+where StudentId not in (select StudentId
+                        from Marks
+                        group by StudentId
+                        having count(*) > 3);
+
+1.6 Удаление студентов, c долгами (здесь и далее — по отсутствию оценки).
+
+delete from Students
+where exists (select distinct CourseId
+              from Plan
+              where Plan.GroupId = Students.GroupId
+              and CourseId not in (select CourseId
+                                   from Marks
+                                   where Marks.StudentId = Students.StudentId))
+
+1.7 Удаление студентов, имеющих 2 и более долга.
+
+delete from Students
+where StudentId in (select StudentId
+                    from Students
+                    natural join Plan
+                    natural left join Marks
+                    where Mark is null
+                    group by StudentId
+                    having count(distinct CourseId) >= 2);
+
+1.8 Удаление студентов, имеющих не более 2 долгов.
+
+delete from Students
+where StudentId not in (select StudentId
+                        from Students
+                        natural join Plan
+                        natural left join Marks
+                        where Mark is null
+                        group by StudentId
+                        having count(distinct CourseId) > 2);
+
+2.1 Изменение имени студента (StudentId, StudentName).
+
+update Students set StudentName = :StudentName where StudentId = :StudentId;
+
+2.2 Перевод студента из группы в группу по индентификаторам (StudentId, GroupId, FromGroupId).
+
+update Students 
+set GroupId = :GroupId 
+where StudentId = :StudentId
+and GroupId = :FromGroupId;
+
+2.3 Перевод всех студентов из группы в группу по идентификаторам (GroupId, FromGroupId).
+
+update Students 
+set GroupId = :GroupId 
+where GroupId = :FromGroupId;
+
+2.4 Перевод всех студентов из группы в группу по названиям (GroupName, FromGroupName).
+2.5 Перевод всех студентов из группы в группу, только если целевая группа существует (GroupName, FromGroupName).
+
+3.1 Число оценок студента (столбец Students.Marks) (StudentId).
+3.2 Число оценок каждого студента (столбец Students.Marks).
+3.3 Пересчет числа оценок каждого студента, с учётом новых оценок из таблицы NewMarks, структура которой такая же как у таблицы Marks (столбец Students.Marks).
+3.4 Число сданных дисциплин каждого студента (столбец Students.Marks).
+3.5 Число долгов студента (столбец Students.Debts) (StudentId).
+3.6 Число долгов каждого студента (столбец Students.Debts).
+3.7 Число долгов каждого студента группы (столбец Students.Debts) (GroupName).
+3.8 Число оценок и долгов каждого студента (столбцы Students.Marks, Students.Debts).
+
+Напишите запросы, обновляющие оценки, с учетом данных из таблицы NewMarks, имеющей такую же структуру, как таблица Marks
+Проставляющий новую оценку только если ранее оценки не было.
+Проставляющий новую оценку только если ранее оценка была.
+Проставляющий максимум из старой и новой оценки только если ранее оценка была.
+Проставляющий максимум из старой и новой оценки (если ранее оценки не было, то новую оценку).

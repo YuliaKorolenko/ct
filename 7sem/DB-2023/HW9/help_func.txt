@@ -1,0 +1,11 @@
+create or replace procedure AddUser(_Id int, _Pass varchar(50), _UserName varchar(30))
+    language plpgsql
+as
+$$
+begin
+    insert into Users
+        (UserId, Pass, UserName)
+        values
+        (_Id, crypt(_Pass, gen_salt('bf')), _UserName);
+end
+$$;

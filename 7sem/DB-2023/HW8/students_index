@@ -1,0 +1,21 @@
+--Является первичным ключом, но не будет никаких запросов, связанных с подотрезками id, поэтому не имеет смысла использовать упорядоченный индекс.
+--ДЗ-5.2.1 Полную информацию о студентах c заданным идентификатором (StudentId, StudentName, GroupName по :StudentId).
+--ДЗ-5.1.1 С заданным идентификатором (StudentId, StudentName, GroupId по :StudentId).
+--ДЗ-7.2.1 Изменение имени студента (StudentId, StudentName).
+
+create unique index sid_index on Students using hash (StudentId);
+
+--Индекс используется для поиска по имени, также на строках лучше использовать tree, в том числе ля того, чтобы совершать префиксы поиск.
+--ДЗ-5.1.2 С заданным ФИО (StudentId, StudentName, GroupId по :StudentName).
+--ДЗ-5.2.2 Полную информацию о студентах c заданным ФИО (StudentId, StudentName, GroupName по :StudentName).
+--ДЗ-6.1.1 Информацию о студентах с заданным ФИО (StudentId, StudentName, GroupId по :StudentName).
+
+create index sname_index on Students using btree (StudentName)
+
+--Внешний ключ и не нужно упорядочивание, поэтому hash
+--ДЗ-6.2.1 Полную информацию о студентах для всех студентов (StudentId, StudentName, GroupName).
+--ДЗ-7.1.1 Удаление студентов, учащихся в группе, заданной идентификатором (GroupId).
+--ДЗ-7.2.3 Перевод всех студентов из группы в группу по идентификаторам (GroupId, FromGroupId).
+create index gid_index oт Students using hash (GroupId);
+
+

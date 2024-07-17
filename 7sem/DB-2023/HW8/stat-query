@@ -1,0 +1,19 @@
+select avg(Mark)
+from Marks
+where StudentId in (select StudentId 
+                    from Students
+                    where GroupId in (select GroupId
+                                      from Groups
+                                      where GroupName = :GroupName))
+and CourseId in (select CourseId
+                 from Courses
+                 where CourseName = :CourseName);
+
+create index gid_stud_index on Students using hash (GroupId);
+
+create unique index sid_cid_marks_index on Marks using btree (StudentId, CourseId, Mark);
+
+create unique index cnme_cid_c_index on Courses using btree (CourseName, CourseId);
+
+create unique index gname_gid_index on Courses using btree (GroupName, GroupId);
+
