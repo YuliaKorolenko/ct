@@ -1,0 +1,3 @@
+/Users/yulkorolenko/Desktop/ML/D/cmake-build-debug/CMakeFiles/D.dir
+/Users/yulkorolenko/Desktop/ML/D/cmake-build-debug/CMakeFiles/edit_cache.dir
+/Users/yulkorolenko/Desktop/ML/D/cmake-build-debug/CMakeFiles/rebuild_cache.dir
