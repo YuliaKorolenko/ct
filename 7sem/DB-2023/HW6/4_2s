@@ -1,0 +1,11 @@
+select StudentName, CourseName
+from Students, Courses
+where exists (select StudentId, CourseId
+              from Plan
+              where Students.GroupId = Plan.GroupId
+              and Courses.CourseId = Plan.CourseId)
+and exists (select StudentId, CourseId
+            from Marks
+            where Marks.CourseId = Courses.CourseId
+            and Marks.StudentId = Students.StudentId
+            and Mark <= 2);

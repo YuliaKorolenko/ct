@@ -1,0 +1,97 @@
+create or replace procedure CompressSeats(_FlightId int)
+    language plpgsql
+as
+$$
+declare
+    mainSeatNo       varchar(4);
+    buyUserId        int;
+    resUserId        int;
+    resTimeComplited timestamp;
+    resCursor refcursor;
+    buyCursor   refcursor;
+    mainCursor cursor for
+    select SeatNo
+    from Flights
+        natural join Seats
+    where FlightId = _FlightId
+    order by SeatNo;
+begin
+    -- проверяем, существует ли FlightId
+    if not exists(select from Flights where FlightId = _FlightId)
+    then
+        return;
+    end if;
+
+    create table TempRes(
+        UserId        int,
+        SeatNo varchar(4),
+        TimeCompleted timestamp not null
+    );
+    create table TempBuy(
+        UserId int,
+        SeatNo varchar(4)
+    );
+
+    -- выбираем активные зарезервированные записи
+    insert into TempRes
+    select UserId, SeatNo, TimeCompleted
+    from Tickets
+    where FlightId = _FlightId
+    and Status = 'reserved'
+    and TimeCompleted > now();
+
+    insert into TempBuy
+    select UserId, SeatNo
+    from Tickets
+    where FlightId = _FlightId
+    and Status = 'bought';
+
+    delete
+    from Tickets
+    where FlightId = _FlightId;
+
+    open buyCursor for
+    select UserId
+    from TempBuy
+    order by SeatNo
+        for update;
+
+    open mainCursor;
+
+    loop
+        fetch buyCursor into buyUserId;
+        if not found then
+            exit;
+        end if;
+        fetch mainCursor into mainSeatNo;
+        insert into Tickets (UserId, FlightId, SeatNo, Status)
+        values (buyUserId, _FlightId, mainSeatNo, 'bought');
+    end loop;
+    close buyCursor;
+
+    open resCursor for 
+    select UserId, TimeCompleted
+    from TempRes;
+
+    loop
+    fetch resCursor into resUserId, resTimeComplited;
+    if not found then
+        exit;
+    end if;
+    fetch mainCursor into mainSeatNo;
+    insert into Tickets (UserId, FlightId, SeatNo, Status, TimeCompleted)
+    values (resUserId, _FlightId, mainSeatNo, 'reserved', resTimeComplited);
+    end loop;
+
+    close resCursor;
+    close mainCursor;
+    drop table TempBuy;
+    drop table TempRes;
+end;
+$$;
+
+-- read uncommitted не подходит, изменяем данные.
+-- repeatable read <<фантомная запись>> мешает, например когда происходит параллельная покупка/бронирование, можно не переместить новые записи.
+-- snapshot <<косые записи>>, не мешают, меняется одна таблица и если поменяли одновременно по ключу, то тогда сохранится одно из двух, а второе упадет.
+-- минимальное подходящее -> snapshot
+start transaction read write isolation level read snapshot;

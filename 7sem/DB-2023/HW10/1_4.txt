@@ -1,0 +1,33 @@
+4. BuyFree(FlightId, SeatNo) — пытается купить свободное место. Возвращает истину, если удалось и ложь — в противном случае.
+
+create or replace function BuyFree(_FlightId int, _SeatNo varchar(4))
+    returns boolean
+    language plpgsql
+as
+$$
+begin
+    -- exist flights and can buy tickets and SeatNo not occupied
+    if not CheckFlightForBuy(_SeatNo, _FlightId)
+       or _SeatNo in (select SeatNo from OccupiedTickets)
+    then 
+       return false;
+    end if;
+
+    insert into Tickets(SeatNo, FlightId, Status, TimeCompleted)
+    values (_SeatNo, _FlightId, 'bought', now())
+    on conflict (FlightId, SeatNo)
+    do update
+    set 
+        Status = 'bought',
+        TimeCompleted = now(),
+        UserId = null;
+    return true;
+end
+$$;
+
+-- read uncommitted не подходит, изменяем данные.
+-- read committed <<неповторяемое чтение>> мешает, параллельно показывается, что места свободны(просрочена резервация), один человек делает update и второй делает успешный update.
+-- repeatable read <<фантомная запись>> мешает, в двух транзакциях показывается, что места свободны, потом 1ый пользователь делает insert, а 2ой успешный update(так как использовала on conflict do update).
+-- snapshot <<косые записи>>, не мешают, если по ключу сделаны две разные записи, то выполнится только одна.
+-- минимальное подходящее -> read snapshot
+start transaction read write isolation level snapshot;

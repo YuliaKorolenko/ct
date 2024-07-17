@@ -1,0 +1,194 @@
+-- использую функции из прошлого дз
+
+create view OccupiedTickets as
+    select FlightId, SeatNo, UserId, Status, TimeCompleted
+    from Tickets
+    where Status = 'bought' or 
+          (Status = 'reserved' and TimeCompleted > now());
+
+-- проверка, что user сущестует и заходит с правильным паролем
+create or replace function CheckUser(_UserId int, _Pass text)
+    returns boolean
+    language plpgsql
+as
+$$
+begin
+    return exists (select *
+                   from Users
+                   where UserId = _UserId
+                   and Pass = crypt(_Pass, Pass));
+end
+$$;
+
+-- проверка, что такое место существует и на него можно бронировать билеты
+create or replace function CheckFlightForRes(_SeatNo varchar(4), _FlightId int)
+    returns boolean
+    language plpgsql
+as
+$$
+begin
+    return exists (select *
+                    from SeatsForFlights 
+                    where SeatNo = _SeatNo
+                    and FlightId = _FlightId
+                    and AllowedRes = true
+                    and now() < FlightTime - interval '3 days');
+end
+$$;
+
+-- проверка, что такое место существует и на него можно покупать билеты
+create or replace function CheckFlightForBuy(_SeatNo varchar(4), _FlightId int)
+    returns boolean
+    language plpgsql
+as
+$$
+begin
+    return exists (select *
+                    from SeatsForFlights 
+                    where SeatNo = _SeatNo
+                    and FlightId = _FlightId
+                    and AllowedBuy = true
+                    and now() < FlightTime - interval '3 hours');
+end
+$$;
+
+create or replace function Reserve(_UserId int, _Pass text, _FlightId int, _SeatNo varchar(4))
+    returns boolean
+    language plpgsql
+as
+$$
+declare
+    NewTime timestamp;
+begin
+    NewTime = now() + interval '3 day';
+    -- is exist user and exist FlightId
+    if not CheckUser(_UserId, _Pass) 
+       or not CheckFlightForRes(_SeatNo, _FlightId)
+    then 
+       return false;
+    end if;
+
+    -- check is this place free
+    if _SeatNo in (select SeatNo from OccupiedTickets where FlightId = _FlightId)
+    then 
+        return false;
+    end if;
+
+    insert into Tickets(UserId, SeatNo, FlightId, Status, TimeCompleted)
+    values (_UserId, _SeatNo, _FlightId, 'reserved', NewTime)
+    on conflict (FlightId, SeatNo)
+    do update
+    set 
+        TimeCompleted = NewTime,
+        UserId = _UserId; 
+
+    return true;
+end
+$$;
+
+
+create or replace function ExtendReservation(_UserId int, _Pass text, _FlightId int, _SeatNo varchar(4))
+    returns boolean
+    language plpgsql
+as
+$$
+declare
+    NewTime timestamp;
+begin
+    NewTime = now() + interval '3 day';
+    -- is exist user and exist SeatNo and this user bought this ticket before
+    if not CheckUser(_UserId, _Pass) 
+       or not CheckFlightForRes(_SeatNo, _FlightId)
+       or not exists (select *
+                      from Tickets
+                      where UserId = _UserId
+                      and SeatNo = _SeatNo
+                      and FlightId = _FlightId
+                      and Status = 'reserved'
+                      and TimeCompleted > now())
+    then 
+       return false;
+    end if;
+
+    update Tickets
+    set TimeCompleted = NewTime
+    where SeatNo = _SeatNo
+    and FlightId = _FlightId;
+    return true;
+end
+$$;
+
+
+create or replace function BuyFree(_FlightId int, _SeatNo varchar(4))
+    returns boolean
+    language plpgsql
+as
+$$
+begin
+    -- exist flights and can buy tickets and SeatNo not occupied
+    if not CheckFlightForBuy(_SeatNo, _FlightId)
+       or _SeatNo in (select SeatNo from OccupiedTickets)
+    then 
+       return false;
+    end if;
+
+    insert into Tickets(SeatNo, FlightId, Status, TimeCompleted)
+    values (_SeatNo, _FlightId, 'bought', now())
+    on conflict (FlightId, SeatNo)
+    do update
+    set 
+        Status = 'bought',
+        TimeCompleted = now(),
+        UserId = null;
+    return true;
+end
+$$;
+
+create or replace function BuyReserved(_UserId int, _Pass text, _FlightId int, _SeatNo varchar(4))
+    returns boolean
+    language plpgsql
+as
+$$
+begin
+    -- проверить существование юзера, что юзер это бронировал и что существует такое место в самолете, где разрешено покупать 
+    if not CheckUser(_UserId, _Pass)
+    or not exists(select *
+            from Tickets
+            where UserId = _UserId
+            and FlightId = _FlightId
+            and SeatNo = _SeatNo
+            and Status = 'reserved'
+            and TimeCompleted >= now())
+    or not CheckFlightForBuy(_SeatNo, _FlightId)
+    then
+        return false;
+    end if;
+
+    update Tickets
+    set TimeCompleted = now(), Status = 'bought'
+    where SeatNo = _SeatNo
+    and FlightId = _FlightId;
+    return true;
+end
+$$;
+
+
+start transaction read write isolation level snapshot;
+select *
+from BuyFree(_FlightId, _SeatNo);
+commit;
+
+start transaction read write isolation level repeatable read;
+select *
+from ExtendReservation(_UserId, _Pass, _FlightId, _SeatNo);
+commit;
+
+start transaction read write isolation level repeatable read;
+select *
+from BuyReserved(_UserId, _Pass, _FlightId, _SeatNo);
+commit;
+
+start transaction read write isolation level snapshot;
+select *
+from Reserve(_UserId, _Pass, _FlightId, _SeatNo);
+commit;

@@ -1,0 +1,48 @@
+-- использую функции из прошлого дз
+
+create view SeatsFree as
+select FlightId, SeatNo
+from Seats
+natural join Flights
+except
+select FlightId, SeatNo
+from SeatsBought
+except
+select FlightId, SeatNo
+from SeatsReserved;
+
+create view SeatsBought as
+select FlightId, UserId, SeatNo
+from Tickets
+where Status = 'bought';
+
+create view SeatsReserved as
+select FlightId, SeatNo, UserId
+from Tickets
+where (Status = 'reserved' and TimeCompleted > now());
+
+create or replace function FreeSeats(_FlightId int)
+    returns table
+        (
+            SeatNo varchar(4)
+        )
+    language plpgsql
+as
+$$
+begin
+    return query select Seats.SeatNo
+                 from Seats
+                 where Seats.PlaneId in (select PlaneId
+                                         from Flights
+                                         where FlightId = _FlightId
+                                         and now() < (FlightTime - INTERVAL '3 days')
+                                         and AllowedBuy
+                                         and AllowedRes)
+                 and Seats.SeatNo in (select SeatsFree.SeatNo from SeatsFree where FlightId = _FlightId);
+end;
+$$;
+
+start transaction read only isolation level read committed;
+select *
+from FreeSeats(_FlightId);
+commit;

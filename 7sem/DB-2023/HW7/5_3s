@@ -1,0 +1,7 @@
+create view Debts as
+select StudentId, count(distinct CourseId) as Debts
+from Students
+natural join Plan
+natural left join Marks
+where Mark is null
+group by StudentId;

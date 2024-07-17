@@ -1,0 +1,8 @@
+update Students
+set Debts = (select count(distinct CourseId)
+             from Students S
+             natural join Plan
+             natural left join Marks
+             where Mark is null
+             and Students.StudentId = S.StudentId)
+where true = true;

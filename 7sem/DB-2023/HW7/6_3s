@@ -1,0 +1,5 @@
+--MariaDB-10.7.8
+create trigger PreserveMarks
+before update on Marks
+for each row
+set new.Mark = greatest(new.Mark, old.Mark);

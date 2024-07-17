@@ -1,0 +1,38 @@
+5. BuyReserved(UserId, Pass, FlightId, SeatNo) — пытается выкупить забронированное место (пользователи должны совпадать).
+Возвращает истину, если удалось и ложь — в противном случае.
+
+create or replace function BuyReserved(_UserId int, _Pass text, _FlightId int, _SeatNo varchar(4))
+    returns boolean
+    language plpgsql
+as
+$$
+begin
+    -- проверить существование юзера, что юзер это бронировал и что существует такое место в самолете, где разрешено покупать 
+    if not CheckUser(_UserId, _Pass)
+    or not exists(select *
+            from Tickets
+            where UserId = _UserId
+            and FlightId = _FlightId
+            and SeatNo = _SeatNo
+            and Status = 'reserved'
+            and TimeCompleted >= now())
+    or not CheckFlightForBuy(_SeatNo, _FlightId)
+    then
+        return false;
+    end if;
+
+    update Tickets
+    set TimeCompleted = now(), Status = 'bought'
+    where SeatNo = _SeatNo
+    and FlightId = _FlightId;
+    return true;
+end
+$$;
+
+-- read uncommitted не подходит, изменяем данные.
+-- read committed <<неповторяемое чтение>> мешает, проверили, что резевация принадлежит 1ому пользователю, она истекла, ее выкупил/забронировал 2ой пользователь, а потом 1ый совершил успешную покупку.
+-- repeatable read <<фантомная запись>> не мешает, можем выкупить, только если зарезервирован(запись существует), появление новой записи никак не повлияет.
+-- snapshot <<косые записи>>, не мешают, одна таблица на buy/reserved.
+-- минимальное подходящее -> repeatable read
+start transaction read write isolation level repeatable read;
+

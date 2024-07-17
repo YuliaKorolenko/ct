@@ -1,0 +1,19 @@
+Действия без авторизаци бывают:
+1. BuyFree(_FlightId, _SeatNo)
+С авторизацией:
+1. BuyReserved(_UserId, _Pass, _FlightId, _SeatNo)
+2. ExtendReservation(_UserId, _Pass, _FlightId, _SeatNo)
+3. Reserve(_UserId, _Pass, _FlightId, _SeatNo)
+
+
+1. _FlightId получаем от пользователя интересующий его рейс
+2. Выводим свободные места -> FreeSeats(_FlightId)
+3. _SeatNo получаем от пользователя выбранное место
+5. _Action получаем действие с местом
+6. if _Action == BuyFree -> вызываем BuyFree(_FlightId, _SeatNo)
+7. else просим юзера авторизоваться
+8. _UserId _Pass Авторизация, получаем UserId и пароль
+9. if _Action == BuyReserved -> вызываем BuyReserved(_UserId, _Pass, _FlightId, _SeatNo)
+10. if _Action == ExtendReservation -> вызываем ExtendReservation(_UserId, _Pass, _FlightId, _SeatNo)
+11. if _Action == Reserve -> вызываем Reserve(_UserId, _Pass, _FlightId, _SeatNo)
+12. Выводим результат исполнения

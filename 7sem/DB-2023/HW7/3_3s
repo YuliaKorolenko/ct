@@ -1,0 +1,5 @@
+update Students
+set Marks = Marks + (select count(*)
+                     from NewMarks
+                     where Students.StudentId = NewMarks.StudentId)
+where true = true;

@@ -1,0 +1,9 @@
+select GroupId, CourseId
+from Groups G, Courses C
+where not exists (select StudentId
+                  from Students S
+                  where S.GroupId = G.GroupId
+                  and not exists (select Mark
+                                  from Marks M
+                                  where M.CourseId = C.CourseId
+                                  and S.StudentId = M.StudentId));

@@ -1,0 +1,10 @@
+select distinct StudentId
+from Students S
+where StudentId not in (select distinct S.StudentId
+                        from Students S, Marks M
+                        where S.StudentId = M.StudentId
+                        and CourseId in (select CourseId 
+                                         from Plan P, Lecturers L
+                                         where P.LecturerId = L.LecturerId
+                                         and P.GroupId = S.GroupId
+                                         and L.LecturerName = :LecturerName));

@@ -1,0 +1,31 @@
+1. FreeSeats(FlightId) — список мест, доступных для продажи и для бронирования.
+
+create or replace function FreeSeats(_FlightId int)
+    returns table
+        (
+            SeatNo varchar(4)
+        )
+    language plpgsql
+as
+$$
+begin
+    return query select Seats.SeatNo
+                 from Seats
+                 where Seats.PlaneId in (select PlaneId
+                                         from Flights
+                                         where FlightId = _FlightId
+                                         and now() < (FlightTime - INTERVAL '3 days')
+                                         and AllowedBuy
+                                         and AllowedRes)
+                 and Seats.SeatNo in (select SeatsFree.SeatNo from SeatsFree where FlightId = _FlightId);
+end;
+$$;
+
+-- read uncommitted не подходит, так как не хотим считывать "грязные записи". Например, показываем free билеты на рейс, при создании которого произошел rollback.
+-- read committed <<неповторяемое чтение>> не мешает, т. к. при параллельных транзакциях, если что-то изменилось, то говорим, что наша транзакция выполнилась раньше, а потом на рейс закрыли продажу, например.
+-- repeatable read <<фантомная запись>> аналогично не мешает, если параллельно появилось место, говорим, что произошло после.
+-- snapshot <<косые записи>> только чтение -> не мешает
+-- минимальное подходящее -> read commited
+start transaction read only isolation level read committed;
+
+

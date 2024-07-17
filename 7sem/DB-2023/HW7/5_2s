@@ -1,0 +1,7 @@
+create view AllMarks as
+select StudentId, count(Mark) as Marks
+from Students
+natural left join (select * from Marks
+                   union all
+                   select * from NewMarks) BothMarks
+group by StudentId;

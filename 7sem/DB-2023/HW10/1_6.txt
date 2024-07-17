@@ -1,0 +1,37 @@
+6. FlightsStatistics(UserId, Pass) — статистика по рейсам: возможность бронирования и покупки,
+число свободных, забронированных и проданных мест.
+
+create or replace function FlightsStatistics(_UserId int, _Pass text)
+returns table
+    (
+        FlightId      int,
+        AllowReserv   bool,
+        AllowBuy      bool,
+        CountFree     bigint,
+        CountReserved bigint,
+        CountBought   bigint
+    )
+as
+$$
+begin
+    if not CheckUser(_UserId, _Pass)
+    then
+        return query (
+            select T.FlightId as FlightId,
+                   T.AllowReserv as AllowReserv,
+                   T.AllowBuy as AllowBuy,
+                   T.CountReserved as CountReserved,
+                   T.CountBought as CountBought,
+                   T.CountFree as CountFree
+            from TicketsStatistics T
+            where UserId = _UserId
+        );
+    else
+        return;
+    end if;
+end
+$$ language plpgsql;
+            
+-- read uncommitted подходит, потому что только чтение и формирование статистики, +- место не сильно влияет на результат
+-- однако в функции есть авторизация пользователя, и чтобы избежать ситуации, когда при изменении пароля/создании пользователя rollback, а мы несуществующему показываем данные
+start transaction read only isolation level read committed;
